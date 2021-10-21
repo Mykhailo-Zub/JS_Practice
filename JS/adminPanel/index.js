@@ -1,65 +1,131 @@
-window.onload = function init() {
-  const saveButton = document.querySelector("#saveButton");
-
-  saveButton.addEventListener("click", () => {
-    const name = document.querySelector("#firstName").value;
-    const department = document.querySelector("#department").value;
-    const form = document.querySelector("#addNewForm");
-    if (validateForm(name, department, form)) {
-      saveData(name, department);
-      clearForm(form);
-    }
-  });
-
-  buildWorkersTable();
+const saveButton = document.querySelector("#saveButton");
+const cancelButton = document.querySelector("#cancelButton");
+const formHeading = document.querySelector(".form__heading");
+const workerName = document.querySelector("#firstName");
+const workerNameError = document.querySelector(".name__error-text");
+const department = document.querySelector("#department");
+const departmentError = document.querySelector(".department__error-text");
+const form = {
+  name: workerName,
+  nameError: workerNameError,
+  department: department,
+  departmentError: departmentError,
 };
 
 function getWorkers() {
-  return JSON.parse(localStorage.getItem("myCompanyWorkers"));
+  let workers;
+  try {
+    workers = JSON.parse(localStorage.getItem("myCompanyWorkers"));
+  } catch {
+    workers = null;
+  }
+  return workers;
 }
 
-function validateForm(name, department, form) {
+function saveWorkers(workers) {
+  const newStorageData = JSON.stringify(workers);
+  localStorage.setItem("myCompanyWorkers", newStorageData);
+}
+
+function clearForm() {
+  workerName.value = "";
+  department.value = "choose";
+  workerName.classList.remove("name__error");
+  workerNameError.classList.add("hidden");
+  department.classList.remove("department__error");
+  departmentError.classList.add("hidden");
+  cancelButton.classList.add("hidden");
+  saveButton.textContent = "Add new worker";
+  formHeading.textContent = "Add new worker";
+  saveButton.removeAttribute("workerid");
+}
+
+function validateForm(form) {
+  const { name, nameError, department, departmentError } = form;
   let isNameOk = false;
   let isDepartmentOk = false;
-  if (!/\W|\d|\s+/gm.test(name) && name !== "") {
+  if (!/\W|\d|\s+/gm.test(name.value) && name.value !== "") {
     isNameOk = true;
-    form.querySelector("input").classList.remove("name__error");
-    form.querySelector(".name__error-text").classList.add("hidden");
+    name.classList.remove("name__error");
+    nameError.classList.add("hidden");
   } else {
-    form.querySelector("input").classList.add("name__error");
-    form.querySelector(".name__error-text").classList.remove("hidden");
+    name.classList.add("name__error");
+    nameError.classList.remove("hidden");
   }
-  if (department !== "choose") {
-    form.querySelector("select").classList.remove("department__error");
-    form.querySelector(".department__error-text").classList.add("hidden");
+  if (department.value !== "choose") {
+    department.classList.remove("department__error");
+    departmentError.classList.add("hidden");
     isDepartmentOk = true;
   } else {
-    form.querySelector("select").classList.add("department__error");
-    form.querySelector(".department__error-text").classList.remove("hidden");
+    department.classList.add("department__error");
+    departmentError.classList.remove("hidden");
   }
   if (isNameOk && isDepartmentOk) {
     return true;
   } else return false;
 }
 
-function saveData(name, department) {
-  const newWorker = {
-    name: name,
-    department: department,
-    creationDate: new Date().toLocaleDateString(),
-    changeDate: new Date().toLocaleDateString(),
-  };
+function saveData(form, changingId) {
+  const { name: nameFromForm, department: departmentFromForm } = form;
   let savedWorkers = getWorkers();
-  if (savedWorkers !== null) {
-    newWorker.id = savedWorkers[savedWorkers.length - 1].id + 1;
-    savedWorkers.push(newWorker);
+  if (changingId) {
+    savedWorkers.forEach((el) => {
+      if (el.id == changingId) {
+        el.name = nameFromForm.value;
+        el.department = departmentFromForm.value;
+        el.changeDate = new Date().toLocaleDateString();
+      }
+    });
   } else {
-    newWorker.id = 1;
-    savedWorkers = [newWorker];
+    const newWorker = {
+      name: nameFromForm.value,
+      department: departmentFromForm.value,
+      creationDate: new Date().toLocaleDateString(),
+      changeDate: new Date().toLocaleDateString(),
+    };
+    if (savedWorkers !== null && savedWorkers.length > 0) {
+      newWorker.id = savedWorkers[savedWorkers.length - 1].id + 1;
+      savedWorkers.push(newWorker);
+    } else {
+      newWorker.id = 1;
+      savedWorkers = [newWorker];
+    }
   }
-  const newStorageData = JSON.stringify(savedWorkers);
-  localStorage.setItem("myCompanyWorkers", newStorageData);
+  saveWorkers(savedWorkers);
   buildWorkersTable();
+}
+
+function fillForm(changingId) {
+  const tableData = getWorkers();
+  tableData.find((el) => {
+    const { name, department: departmentForChange, id } = el;
+    if (id == changingId) {
+      workerName.value = name;
+      department.value = departmentForChange;
+    }
+  });
+  saveButton.setAttribute("workerid", changingId);
+  cancelButton.classList.remove("hidden");
+  cancelButton.addEventListener("click", () => {
+    clearForm();
+  });
+  saveButton.textContent = "Change worker info";
+  formHeading.textContent = "Change worker info";
+}
+
+function deleteWorker(id) {
+  const tableData = getWorkers();
+  let isDelete = false;
+  tableData.find((el) => {
+    if (el.id == id) {
+      isDelete = confirm(`Do you really want to delete ${el.name}?`);
+    }
+  });
+  if (isDelete) {
+    const changedWorkers = tableData.filter((el) => el.id != id);
+    saveWorkers(changedWorkers);
+    buildWorkersTable();
+  }
 }
 
 function buildWorkersTable() {
@@ -73,86 +139,45 @@ function buildWorkersTable() {
   }
   if (!tableData) return;
 
-  tableData.forEach((rowData, index) => {
+  tableData.forEach((rowData) => {
+    const { name, department, creationDate, changeDate, id } = rowData;
     const row = document.createElement("div");
     row.classList.add("table__row");
-    if (index % 2 !== 0) {
-      row.classList.add("table__row_odd");
-    }
     row.innerHTML = `
-    <div class="table__data table__data-name">${rowData.name}</div>
-    <div class="table__data table__data-department">${rowData.department}</div>
-    <div class="table__data table__data-created">${rowData.creationDate}</div>
-    <div class="table__data table__data-changed">${rowData.changeDate}</div>
+    <div class="table__data table__data-name">${name}</div>
+    <div class="table__data table__data-department">${department}</div>
+    <div class="table__data table__data-created">${creationDate}</div>
+    <div class="table__data table__data-changed">${changeDate}</div>
     <div class="table__buttons">
-      <div onclick='showModal(${rowData.id})' class="table__btn table__data-changeBtn">Change worker information</div>
-      <div onclick='deleteWorker(${rowData.id})' class="table__btn table__data-deleteBtn">Delete worker</div>
+      <div workerid='${id}' class="table__btn table__data-changeBtn">Change worker information</div>
+      <div workerid='${id}' class="table__btn table__data-deleteBtn">Delete worker</div>
     </div>
       `;
     table.append(row);
   });
-}
+  const changeBtns = document.querySelectorAll(".table__data-changeBtn");
+  const deleteBtns = document.querySelectorAll(".table__data-deleteBtn");
 
-function showModal(id) {
-  const tableData = getWorkers();
-  document.querySelector(".modal").classList.remove("hidden");
-  document.querySelector(".wrapper__modal").classList.remove("hidden");
-  tableData.forEach((el) => {
-    if (el.id == id) {
-      document.querySelector("#firstNameChange").value = el.name;
-      document.querySelector("#departmentChange").value = el.department;
-    }
-  });
-  document.querySelector("#changeButton").onclick = () => {
-    chahgeWorkerInfo(id, tableData);
-  };
-  document.querySelector("#closeButton").onclick = () => {
-    document.querySelector(".modal").classList.add("hidden");
-    document.querySelector(".wrapper__modal").classList.add("hidden");
-  };
-}
-
-function chahgeWorkerInfo(id, tableData) {
-  const name = document.querySelector("#firstNameChange").value;
-  const department = document.querySelector("#departmentChange").value;
-  const form = document.querySelector("#changeForm");
-  if (validateForm(name, department, form)) {
-    // const changedWorkers = tableData.filter((el) => el.id != id);
-    tableData.forEach((el) => {
-      if (el.id == id) {
-        el.name = name;
-        el.department = department;
-        el.changeDate = new Date().toLocaleDateString();
-      }
+  changeBtns.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      fillForm(btn.getAttribute("workerid"));
     });
-    const newStorageData = JSON.stringify(tableData);
-    localStorage.setItem("myCompanyWorkers", newStorageData);
-    buildWorkersTable();
-    document.querySelector(".modal").classList.add("hidden");
-    document.querySelector(".wrapper__modal").classList.add("hidden");
-    clearForm(form);
-  }
+  });
+  deleteBtns.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      deleteWorker(btn.getAttribute("workerid"));
+    });
+  });
 }
 
-function deleteWorker(id) {
-  const tableData = getWorkers();
-  let isDelete = false;
-  tableData.forEach((el) => {
-    if (el.id == id) {
-      isDelete = confirm(`Do you really want to delete ${el.name}?`);
+window.onload = function init() {
+  saveButton.addEventListener("click", () => {
+    const id = saveButton.getAttribute("workerid");
+    if (validateForm(form)) {
+      saveData(form, id);
+      clearForm(form);
     }
   });
-  if (isDelete) {
-    const changedWorkers = tableData.filter((el) => el.id != id);
-    const newStorageData = JSON.stringify(changedWorkers);
-    localStorage.setItem("myCompanyWorkers", newStorageData);
-    buildWorkersTable();
-    document.querySelector(".modal").classList.add("hidden");
-    document.querySelector(".wrapper__modal").classList.add("hidden");
-  }
-}
 
-function clearForm(form) {
-  form.querySelector("input").value = "";
-  form.querySelector("select").value = "choose";
-}
+  buildWorkersTable();
+};

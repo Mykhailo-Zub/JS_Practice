@@ -79,7 +79,7 @@ button {
     height: 90px;
 }
 
-.table__row_odd {
+.table__row:nth-child(2n) {
     background-color: rgb(143, 143, 143);
 }
 

@@ -10,7 +10,7 @@
 <body>
     <div class="wrapper">
         <h2 class="heading">Admin panel</h2>
-        <h4>Add new worker</h4>
+        <h4 class="form__heading">Add new worker</h4>
         <form id='addNewForm'>
             <label for="firstName">
                 <div class="name__error-text hidden">The name must contain only letters</div>
@@ -27,6 +27,7 @@
                 </select>
             </label>
             <button type="button" id='saveButton'>Add new worker</button>
+            <button type="button" id='cancelButton' class="hidden">Cancel</button>
         </form>
         <h4 class="workers__table">Employees of the company "Horns and Hooves"</h4>
         <div class="table">
@@ -59,7 +60,7 @@
                     </select>
                 </label>
                 <button type="button" id='changeButton'>Change worker info</button>
-                <button type="button" id='closeButton'>Cancel</button>
+
             </form>
         </div>
     </div>

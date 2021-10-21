@@ -1,9 +1,6 @@
 class CustomArray {
-  constructor() {
-    this.array = [];
-    for (let i = 0; i < arguments.length; i++) {
-      this.array[i] = arguments[i];
-    }
+  constructor(...args) {
+    this.array = args;
   }
 
   customPush(item) {
@@ -11,16 +8,12 @@ class CustomArray {
   }
 
   customPop() {
-    const newArray = [];
-    for (let i = 0; i < this.array.length - 1; i++) {
-      newArray[i] = this.array[i];
-    }
-    this.array = newArray;
+    this.array.length = this.array.length - 1;
   }
 
   customForEach(callback) {
     for (let i = 0; i < this.array.length; i++) {
-      callback(this.array[i], i);
+      callback(this.array[i], i, this.array);
     }
   }
 
@@ -35,7 +28,7 @@ class CustomArray {
   customFilter(callback) {
     const newArray = [];
     for (let i = 0, j = 0; i < this.array.length; i++) {
-      if (typeof callback(this.array[i], i) === "boolean" && callback(this.array[i], i) === true) {
+      if (callback(this.array[i], i)) {
         newArray[j] = this.array[i];
         j++;
       }
@@ -44,22 +37,18 @@ class CustomArray {
   }
 
   customFind(callback) {
-    const newArray = [];
     for (let i = 0; i < this.array.length; i++) {
-      if (typeof callback(this.array[i], i) === "boolean" && callback(this.array[i], i) === true) {
-        newArray[0] = this.array[i];
-        break;
+      if (callback(this.array[i], i)) {
+        return this.array[i];
       }
     }
-    if (newArray[0] === undefined) {
-      return;
-    } else return newArray;
+    return;
   }
 
   customEvery(callback) {
     const newArray = [];
     for (let i = 0, j = 0; i < this.array.length; i++) {
-      if (typeof callback(this.array[i], i) === "boolean" && callback(this.array[i], i) === true) {
+      if (callback(this.array[i], i)) {
         newArray[j] = this.array[i];
         j++;
       }
@@ -72,7 +61,7 @@ class CustomArray {
   customSome(callback) {
     const newArray = [];
     for (let i = 0; i < this.array.length; i++) {
-      if (typeof callback(this.array[i], i) === "boolean" && callback(this.array[i], i) === true) {
+      if (callback(this.array[i], i)) {
         newArray[0] = this.array[i];
         break;
       }
@@ -89,30 +78,32 @@ class CustomArray {
 
 let customArray = new CustomArray(10, "awda", 4, "awd", null, 65, 48);
 
-// customArray.customPush("this is push");
+customArray.customPush("this is push");
 
-// customArray.log();
+customArray.log();
 
-// customArray.customPop();
+customArray.customPop();
 
-// customArray.customForEach((el, i) => console.log(el, i));
+customArray.log();
 
-// const mappedCustomArray = customArray.customMap((el, i) => el + "" + i);
+customArray.customForEach((el, i, array) => console.log(el, i, array));
 
-// console.log(mappedCustomArray);
+const mappedCustomArray = customArray.customMap((el, i) => el + "" + i);
 
-// const filteredCustomArray = customArray.customFilter((el, i) => typeof el === "number");
+console.log(mappedCustomArray);
 
-// console.log(filteredCustomArray);
+const filteredCustomArray = customArray.customFilter((el, i) => typeof el === "number");
 
-// const foundCustomArray = customArray.customFind((el, i) => el > 50);
+console.log(filteredCustomArray);
 
-// console.log(foundCustomArray);
+const foundCustomArray = customArray.customFind((el, i) => el > 50);
 
-// const everyCustomArray = customArray.customEvery((el, i) => el !== 50);
+console.log(foundCustomArray);
 
-// console.log(everyCustomArray);
+const everyCustomArray = customArray.customEvery((el, i) => el !== 50);
 
-// const someCustomArray = customArray.customSome((el, i) => el === "awd");
+console.log(everyCustomArray);
 
-// console.log(someCustomArray);
+const someCustomArray = customArray.customSome((el, i) => el === "awd");
+
+console.log(someCustomArray);

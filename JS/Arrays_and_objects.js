@@ -3,9 +3,9 @@
 function findAverage1(array) {
   let sum = 0;
   let amount = 0;
-  for (let i = 1; i <= array.length; i += 1) {
-    if (i % 2 === 0 && array[i - 1] % 2 !== 0) {
-      sum += array[i - 1];
+  for (let i = 0; i < array.length; i += 1) {
+    if (i % 2 !== 0 && array[i] % 2 !== 0) {
+      sum += array[i];
       amount += 1;
     }
   }
@@ -16,16 +16,12 @@ function findAverage1(array) {
 
 function findAverage2(array) {
   let amount = 0;
-  const sum = array
-    .filter((el, i) => {
-      if ((i + 1) % 2 === 0) return el;
-    })
-    .reduce((sum, el) => {
-      if (el % 2 !== 0) {
-        amount += 1;
-        return (sum += el);
-      } else return sum;
-    }, 0);
+  const sum = array.reduce((sum, el, i) => {
+    if (el % 2 !== 0 && i % 2 !== 0) {
+      amount += 1;
+      return (sum += el);
+    } else return sum;
+  }, 0);
   const result = sum / amount;
   console.log("Find average 2: ", result);
   return result;
@@ -65,12 +61,13 @@ const goods = [
 ];
 
 function countAmount(array) {
-  let amount = 0;
+  let sum = 0;
   array.forEach((el) => {
-    amount += el.amount * el.price;
+    const { amount, price } = el;
+    sum += amount * price;
   });
-  console.log("Count amount: ", amount);
-  return amount;
+  console.log("Count amount: ", sum);
+  return sum;
 }
 
 countAmount(goods);
@@ -86,10 +83,11 @@ const arrayOfGoods = [
 
 function createObject(array) {
   const result = array.reduce((arr, el, i) => {
+    const [name, amount, price] = el;
     arr[i] = {
-      name: el[0],
-      amount: el[1],
-      price: el[2],
+      name: name,
+      amount: amount,
+      price: price,
     };
     return arr;
   }, []);
@@ -107,7 +105,7 @@ function filterObjectByName(object, filter) {
   const newObject = {};
   for (names in object) {
     if (names.includes(filter)) {
-      newObject[`${names}`] = object[`${names}`];
+      newObject[names] = object[names];
     }
   }
   console.log("Filter object by name: ", newObject);

@@ -5,10 +5,13 @@ class CustomArray {
 
   customPush(item) {
     this.array[this.array.length] = item;
+    return this.array.length;
   }
 
   customPop() {
+    const deletingItem = this.array[this.array.length - 1];
     this.array.length = this.array.length - 1;
+    return deletingItem;
   }
 
   customForEach(callback) {
@@ -20,7 +23,7 @@ class CustomArray {
   customMap(callback) {
     const newArray = [];
     for (let i = 0; i < this.array.length; i++) {
-      newArray[i] = callback(this.array[i], i);
+      newArray[i] = callback(this.array[i], i, this.array);
     }
     return newArray;
   }
@@ -28,7 +31,7 @@ class CustomArray {
   customFilter(callback) {
     const newArray = [];
     for (let i = 0, j = 0; i < this.array.length; i++) {
-      if (callback(this.array[i], i)) {
+      if (callback(this.array[i], i, this.array)) {
         newArray[j] = this.array[i];
         j++;
       }
@@ -38,7 +41,7 @@ class CustomArray {
 
   customFind(callback) {
     for (let i = 0; i < this.array.length; i++) {
-      if (callback(this.array[i], i)) {
+      if (callback(this.array[i], i, this.array)) {
         return this.array[i];
       }
     }
@@ -48,7 +51,7 @@ class CustomArray {
   customEvery(callback) {
     const newArray = [];
     for (let i = 0, j = 0; i < this.array.length; i++) {
-      if (callback(this.array[i], i)) {
+      if (callback(this.array[i], i, this.array)) {
         newArray[j] = this.array[i];
         j++;
       }
@@ -61,7 +64,7 @@ class CustomArray {
   customSome(callback) {
     const newArray = [];
     for (let i = 0; i < this.array.length; i++) {
-      if (callback(this.array[i], i)) {
+      if (callback(this.array[i], i, this.array)) {
         newArray[0] = this.array[i];
         break;
       }
@@ -78,11 +81,11 @@ class CustomArray {
 
 let customArray = new CustomArray(10, "awda", 4, "awd", null, 65, 48);
 
-customArray.customPush("this is push");
+console.log(customArray.customPush("this is push"));
 
 customArray.log();
 
-customArray.customPop();
+console.log(customArray.customPop());
 
 customArray.log();
 

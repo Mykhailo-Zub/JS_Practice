@@ -5,12 +5,6 @@ const workerName = document.querySelector("#firstName");
 const workerNameError = document.querySelector(".name__error-text");
 const department = document.querySelector("#department");
 const departmentError = document.querySelector(".department__error-text");
-const form = {
-  name: workerName,
-  nameError: workerNameError,
-  department: department,
-  departmentError: departmentError,
-};
 
 function getWorkers() {
   let workers;
@@ -24,7 +18,11 @@ function getWorkers() {
 
 function saveWorkers(workers) {
   const newStorageData = JSON.stringify(workers);
-  localStorage.setItem("myCompanyWorkers", newStorageData);
+  try {
+    localStorage.setItem("myCompanyWorkers", newStorageData);
+  } catch {
+    alert("Writing data to local storage failed!");
+  }
 }
 
 function clearForm() {
@@ -37,20 +35,19 @@ function clearForm() {
   cancelButton.classList.add("hidden");
   saveButton.textContent = "Add new worker";
   formHeading.textContent = "Add new worker";
-  saveButton.removeAttribute("workerid");
+  saveButton.removeAttribute("data-workerid");
 }
 
-function validateForm(form) {
-  const { name, nameError, department, departmentError } = form;
+function validateForm() {
   let isNameOk = false;
   let isDepartmentOk = false;
-  if (!/\W|\d|\s+/gm.test(name.value) && name.value !== "") {
+  if (!/\W|\d|\s+/gm.test(workerName.value) && workerName.value !== "") {
     isNameOk = true;
-    name.classList.remove("name__error");
-    nameError.classList.add("hidden");
+    workerName.classList.remove("name__error");
+    workerNameError.classList.add("hidden");
   } else {
-    name.classList.add("name__error");
-    nameError.classList.remove("hidden");
+    workerName.classList.add("name__error");
+    workerNameError.classList.remove("hidden");
   }
   if (department.value !== "choose") {
     department.classList.remove("department__error");
@@ -65,21 +62,20 @@ function validateForm(form) {
   } else return false;
 }
 
-function saveData(form, changingId) {
-  const { name: nameFromForm, department: departmentFromForm } = form;
+function saveData(changingId) {
   let savedWorkers = getWorkers();
   if (changingId) {
-    savedWorkers.forEach((el) => {
+    savedWorkers.find((el) => {
       if (el.id == changingId) {
-        el.name = nameFromForm.value;
-        el.department = departmentFromForm.value;
+        el.name = workerName.value;
+        el.department = department.value;
         el.changeDate = new Date().toLocaleDateString();
       }
     });
   } else {
     const newWorker = {
-      name: nameFromForm.value,
-      department: departmentFromForm.value,
+      name: workerName.value,
+      department: department.value,
       creationDate: new Date().toLocaleDateString(),
       changeDate: new Date().toLocaleDateString(),
     };
@@ -104,7 +100,7 @@ function fillForm(changingId) {
       department.value = departmentForChange;
     }
   });
-  saveButton.setAttribute("workerid", changingId);
+  saveButton.dataset.workerid = changingId;
   cancelButton.classList.remove("hidden");
   cancelButton.addEventListener("click", () => {
     clearForm();
@@ -149,8 +145,8 @@ function buildWorkersTable() {
     <div class="table__data table__data-created">${creationDate}</div>
     <div class="table__data table__data-changed">${changeDate}</div>
     <div class="table__buttons">
-      <div workerid='${id}' class="table__btn table__data-changeBtn">Change worker information</div>
-      <div workerid='${id}' class="table__btn table__data-deleteBtn">Delete worker</div>
+      <div data-workerid='${id}' class="table__btn table__data-changeBtn">Change worker information</div>
+      <div data-workerid='${id}' class="table__btn table__data-deleteBtn">Delete worker</div>
     </div>
       `;
     table.append(row);
@@ -160,22 +156,22 @@ function buildWorkersTable() {
 
   changeBtns.forEach((btn) => {
     btn.addEventListener("click", () => {
-      fillForm(btn.getAttribute("workerid"));
+      fillForm(btn.dataset.workerid);
     });
   });
   deleteBtns.forEach((btn) => {
     btn.addEventListener("click", () => {
-      deleteWorker(btn.getAttribute("workerid"));
+      deleteWorker(btn.dataset.workerid);
     });
   });
 }
 
-window.onload = function init() {
+window.onload = function () {
   saveButton.addEventListener("click", () => {
-    const id = saveButton.getAttribute("workerid");
-    if (validateForm(form)) {
-      saveData(form, id);
-      clearForm(form);
+    const id = saveButton.dataset.workerid;
+    if (validateForm()) {
+      saveData(id);
+      clearForm();
     }
   });
 

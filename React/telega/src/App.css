@@ -1,0 +1,8 @@
+.main__wrapper {
+  border: 2px solid #fff;
+  border-radius: 5px;
+  width: 350px;
+  height: 650px;
+  margin: 30px auto;
+  background-color: #000;
+}

@@ -1,0 +1,54 @@
+.wrapper {
+    margin-top: 30px;
+    background-color: rgb(184, 184, 184);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.heading {
+    background-color: rgb(88, 88, 88);
+    color: rgb(230, 230, 230);
+    display: flex;
+    width: 100%;
+    align-items: center;
+    font-size: 14px;
+}
+
+.heading div{
+margin: 10px 10px;
+text-align: center;
+}
+
+.tbody {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+}
+
+.tbody > div:nth-child(2n) {
+    background-color: rgb(143, 143, 143);
+}
+
+.name {
+    width: 25%;
+}
+
+.gender {
+    width: 25%;
+}
+
+.age {
+    width: 16%;
+}
+
+.time {
+    width: 16%;
+}
+
+.action {
+    width: 18%;
+}

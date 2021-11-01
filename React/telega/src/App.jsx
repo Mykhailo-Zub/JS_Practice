@@ -1,5 +1,5 @@
 import React from "react";
-import "./App.css";
+import styled from "styled-components";
 import Header from "./components/Header/Header";
 import dartImg from "./img/Darth_Vader.jpg";
 import chewImg from "./img/Chewbacca.jpg";
@@ -16,7 +16,7 @@ const users = [
     isAuthor: true,
     isRead: false,
     isOnline: true,
-    time: "16:33",
+    time: new Date(2021, 10, 1, 16, 33),
   },
   {
     avatar: chewImg,
@@ -25,7 +25,7 @@ const users = [
     isAuthor: false,
     isRead: false,
     isOnline: true,
-    time: "15:40",
+    time: new Date(2021, 10, 1, 15, 40),
   },
   {
     avatar: c3poImg,
@@ -34,7 +34,7 @@ const users = [
     isAuthor: true,
     isRead: true,
     isOnline: false,
-    time: "09:18",
+    time: new Date(2021, 10, 1, 9, 1),
   },
   {
     avatar: yodaImg,
@@ -43,7 +43,7 @@ const users = [
     isAuthor: true,
     isRead: true,
     isOnline: true,
-    time: "Mon",
+    time: new Date(2021, 9, 28, 20, 55),
   },
   {
     avatar: jabbaImg,
@@ -52,30 +52,27 @@ const users = [
     isAuthor: false,
     isRead: false,
     isOnline: false,
-    time: "Okt 20",
+    time: new Date(2021, 9, 20, 10, 18),
   },
 ];
 
+const MainWrapper = styled.div`
+  border: 2px solid #fff;
+  border-radius: 5px;
+  width: 350px;
+  height: 650px;
+  margin: 30px auto;
+  background-color: #000;
+`;
+
 function App() {
   return (
-    <div className="main__wrapper">
+    <MainWrapper>
       <Header title="Telegram" />
       {users.map((user, index) => {
-        const { avatar, name, lastMessage, isOnline, isRead, time, isAuthor } = user;
-        return (
-          <Contact
-            key={index}
-            avatar={avatar}
-            name={name}
-            lastMessage={lastMessage}
-            isOnline={isOnline}
-            isRead={isRead}
-            time={time}
-            isAuthor={isAuthor}
-          />
-        );
+        return <Contact key={index} userInfo={user} />;
       })}
-    </div>
+    </MainWrapper>
   );
 }
 

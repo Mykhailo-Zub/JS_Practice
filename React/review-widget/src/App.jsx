@@ -1,10 +1,10 @@
 import React, { Component } from "react";
-import Counter from "../Counter/Counter";
-import Widget from "../Widget/Widget";
+import styles from "./App.module.css";
+import Counter from "./components/Counter/Counter";
+import Widget from "./components/Widget/Widget";
 
-class Reviews extends Component {
+class App extends Component {
   state = {
-    reviews: 0,
     bad: 0,
     average: 0,
     good: 0,
@@ -24,18 +24,14 @@ class Reviews extends Component {
         average: (prevState.average += 1),
       }));
     }
-    this.setState((prevState) => ({
-      reviews: (prevState.reviews += 1),
-    }));
   };
-
   render() {
     return (
-      <>
+      <div className={styles.wrapper}>
         <Widget rating={this.ratingHandler} /> <Counter data={this.state} />
-      </>
+      </div>
     );
   }
 }
 
-export default Reviews;
+export default App;

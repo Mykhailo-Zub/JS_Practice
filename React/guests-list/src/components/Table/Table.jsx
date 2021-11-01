@@ -1,7 +1,8 @@
 import React from "react";
 import styles from "./Table.module.css";
+import TableRow from "../TableRow/TableRow";
 
-function Table(props) {
+function Table({ guests, checkGuest }) {
   return (
     <div className={styles.wrapper}>
       <div className={styles.heading}>
@@ -11,7 +12,22 @@ function Table(props) {
         <div className={styles.time}>Arrival time</div>
         <div className={styles.action}>The guest came</div>
       </div>
-      <div className={styles.tbody}>{props.children}</div>
+      <div className={styles.tbody}>
+        {guests
+          .sort((a, b) => {
+            if (a.name.toLowerCase() < b.name.toLowerCase()) {
+              return 1;
+            } else return -1;
+          })
+          .sort((a, b) => {
+            if (a.isCome > b.isCome) {
+              return 1;
+            } else return -1;
+          })
+          .map((guest, index) => (
+            <TableRow data={guest} key={index} checkGuest={() => checkGuest(guest.id)} />
+          ))}
+      </div>
     </div>
   );
 }

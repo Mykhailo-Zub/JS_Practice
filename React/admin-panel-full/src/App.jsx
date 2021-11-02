@@ -41,11 +41,15 @@ class App extends Component {
     let newTableData;
     if (changingId) {
       newTableData = tableData.map((el) => {
-        // let { name, department, changeDate, id } = el; Тут не получается деструктуризация
-        if (el.id === changingId) {
-          el.name = incomeName;
-          el.department = incomeDepartment;
-          el.changeDate = new Date().toLocaleDateString();
+        const { id, creationDate } = el;
+        if (id === changingId) {
+          return {
+            name: incomeName,
+            department: incomeDepartment,
+            changeDate: new Date().toLocaleDateString(),
+            id,
+            creationDate,
+          };
         }
         return el;
       });

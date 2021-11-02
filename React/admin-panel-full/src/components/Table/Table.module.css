@@ -51,3 +51,20 @@ text-align: center;
 .action {
     width: 32%;
 }
+
+.search {
+    margin: 10px auto;
+    width: 500px;
+    height: 30px;
+    padding: 0 30px;
+    border: 0px;
+    border-radius: 5px;
+    background-color: rgb(124, 122, 122);
+    color: #fff;
+  }
+  
+  .search::placeholder {
+    position: absolute;
+    left: 5px;
+    top: 5px;
+  }

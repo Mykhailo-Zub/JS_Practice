@@ -10,24 +10,28 @@ class GuestForm extends Component {
   };
 
   setName = (e) => {
-    this.setState({ name: e.target.value });
-    if (!/\W|\d|\s+/gm.test(e.target.value) && e.target.value !== "") {
+    const name = e.target.value;
+    this.setState({ name });
+    if (!/\W|\d|\s+/gm.test(name) && name !== "") {
       this.setState({ isNameOk: true });
     } else this.setState({ isNameOk: false });
   };
   setAge = (e) => {
-    this.setState({ age: e.target.value });
+    const age = e.target.value;
+    this.setState({ age });
   };
   setGender = (e) => {
-    this.setState({ gender: e.target.value });
+    const gender = e.target.value;
+    this.setState({ gender });
   };
 
   checkNameAndSaveGuest = () => {
-    if (this.state.isNameOk) {
+    const { name, age, gender, isNameOk } = this.state;
+    if (isNameOk) {
       const guest = {
-        name: this.state.name,
-        age: this.state.age,
-        gender: this.state.gender,
+        name,
+        age,
+        gender,
       };
       this.props.saveGuest(guest);
       this.setState({
@@ -39,17 +43,18 @@ class GuestForm extends Component {
     } else alert("Enter the correct name");
   };
   render() {
+    const {name, gender, age, isNameOk} = this.state
     return (
       <div className={styles.wrapper}>
         <div className={styles.header}>Add new guest</div>
         <div className={styles.form}>
           <label htmlFor="name">
-            Guest name: <input name="name" type="text" value={this.state.name} onChange={this.setName} />
-            <div className={`${styles.errorText} ${this.state.isNameOk ? `${styles.hidden}` : ""}`}>The name must contain only letters</div>
+            Guest name: <input name="name" type="text" value={name} onChange={this.setName} />
+            <div className={`${styles.errorText} ${isNameOk ? `${styles.hidden}` : ""}`}>The name must contain only letters</div>
           </label>
           <label htmlFor="gender">
             Guest gender:{" "}
-            <select name="gender" type="text" value={this.state.gender} onChange={this.setGender}>
+            <select name="gender" type="text" value={gender} onChange={this.setGender}>
               <option disabled value="not choose">
                 Choose gender
               </option>
@@ -58,7 +63,7 @@ class GuestForm extends Component {
             </select>
           </label>
           <label htmlFor="age">
-            Guest age: <input name="age" type="number" value={this.state.age} onChange={this.setAge} />
+            Guest age: <input name="age" type="number" value={age} onChange={this.setAge} />
           </label>
         </div>
         <div className={styles.button} onClick={this.checkNameAndSaveGuest}>

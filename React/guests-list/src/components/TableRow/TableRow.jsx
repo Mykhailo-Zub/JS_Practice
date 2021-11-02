@@ -10,7 +10,7 @@ function TableRow({ data, checkGuest }) {
       <div className={styles.age}>{age}</div>
       <div className={styles.time}>{time}</div>
       <div className={styles.action}>
-        <input id={id} type="checkbox" value={isCome} checked={isCome} disabled={isCome} onChange={checkGuest} />
+        <input id={id} type="checkbox" checked={isCome} disabled={isCome} onChange={checkGuest} />
       </div>
     </div>
   );

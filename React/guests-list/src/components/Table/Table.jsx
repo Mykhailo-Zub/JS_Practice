@@ -24,9 +24,10 @@ function Table({ guests, checkGuest }) {
               return 1;
             } else return -1;
           })
-          .map((guest, index) => (
-            <TableRow data={guest} key={index} checkGuest={() => checkGuest(guest.id)} />
-          ))}
+          .map((guest, index) => {
+            const { id } = guest;
+            return <TableRow data={guest} key={index} checkGuest={() => checkGuest(id)} />;
+          })}
       </div>
     </div>
   );

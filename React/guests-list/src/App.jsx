@@ -28,38 +28,43 @@ class App extends Component {
   };
 
   saveGuest = (guest) => {
+    const { guests } = this.state;
     const { name, age, gender } = guest;
-    this.state.guests.push({
+    const newGuest = {
       name,
       age,
       gender,
       isCome: false,
       time: "",
-      id: this.state.guests.length + 1,
-    });
+      id: guests.length + 1,
+    };
     this.setState({
-      guests: this.state.guests,
+      guests: [...guests, newGuest],
     });
   };
-  checkGuest = (id) => {
-    const guestForCheck = this.state.guests.findIndex((guest) => {
-      return guest.id === parseInt(id);
-    });
-    const checkedGuests = this.state.guests.map((guest, index) => {
-      if (guestForCheck === index) {
-        guest.isCome = true;
-        guest.time = new Date().toLocaleTimeString(navigator.language, { hour: "2-digit", minute: "2-digit" });
-      }
-      return guest;
+  checkGuest = (checkedId) => {
+    const checkedGuests = this.state.guests.map((guest) => {
+      const {name, age, gender, id} = guest
+      if (id === checkedId) {
+        return {
+          name,
+          age,
+          gender,
+          id,
+          isCome: true,
+          time: new Date().toLocaleTimeString(navigator.language, { hour: "2-digit", minute: "2-digit" }),
+        }
+      } else return guest;
     });
     this.setState({ guests: checkedGuests });
   };
 
   render() {
+    const { guests } = this.state;
     return (
       <div className={styles.wrapper}>
         <GuestForm saveGuest={this.saveGuest} />
-        <Table guests={this.state.guests} checkGuest={this.checkGuest}></Table>
+        <Table guests={guests} checkGuest={this.checkGuest}></Table>
       </div>
     );
   }

@@ -13,35 +13,28 @@ class Form extends Component {
     const { name: prevName } = prevProps;
     const { name, department } = this.props;
     if (prevName !== name) {
-      this.setState({ name, department, isNameOk: true, isDepartmentOk: true });
+      this.setState({ name, department, isNameOk: !/\W|\d|\s+/gm.test(name) && name !== "", isDepartmentOk: department !== "choose" });
     }
   }
 
   setName = (e) => {
     const newName = e.target.value;
-    this.setState({ name: newName });
-    if (!/\W|\d|\s+/gm.test(newName) && newName !== "") {
-      this.setState({ isNameOk: true });
-    } else this.setState({ isNameOk: false });
+    this.setState({
+      name: newName,
+      isNameOk: !/\W|\d|\s+/gm.test(newName) && newName !== "",
+    });
   };
 
   setDepartment = (e) => {
     const newDepartment = e.target.value;
-    this.setState({ department: newDepartment });
-    if (newDepartment !== "choose") {
-      this.setState({ isDepartmentOk: true });
-    } else this.setState({ isDepartmentOk: false });
+    this.setState({ department: newDepartment, isDepartmentOk: newDepartment !== "choose" });
   };
 
   checkAndSaveWorker = () => {
-    const { changingId, saveWorker } = this.props;
+    const { saveWorker } = this.props;
     const { name, department, isNameOk, isDepartmentOk } = this.state;
     if (isNameOk && isDepartmentOk) {
-      if (changingId) {
-        saveWorker(changingId, name, department);
-      } else {
-        saveWorker(null, name, department);
-      }
+      saveWorker(name, department);
       this.setState({ name: "", department: "choose", isNameOk: false, isDepartmentOk: false });
     } else alert("Please enter correct name and choose department");
   };

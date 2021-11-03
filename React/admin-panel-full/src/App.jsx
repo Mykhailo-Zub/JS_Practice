@@ -7,8 +7,6 @@ import Form from "./components/Form/Form";
 class App extends Component {
   state = {
     tableData: [],
-    changingName: "",
-    changingDepartment: "choose",
     changingId: null,
   };
 
@@ -22,9 +20,7 @@ class App extends Component {
   }
 
   fillFormForChange = (id) => {
-    const { tableData } = this.state;
-    const { name, department } = tableData.find((el) => el.id === parseInt(id));
-    this.setState({ changingName: name, changingDepartment: department, changingId: id });
+    this.setState({ changingId: id });
   };
 
   deleteWorker = (id, name) => {
@@ -36,8 +32,8 @@ class App extends Component {
     }
   };
 
-  saveWorker = (changingId, incomeName, incomeDepartment) => {
-    const { tableData } = this.state;
+  saveWorker = (incomeName, incomeDepartment) => {
+    const { tableData, changingId } = this.state;
     let newTableData;
     if (changingId) {
       newTableData = tableData.map((el) => {
@@ -60,13 +56,8 @@ class App extends Component {
         creationDate: new Date().toLocaleDateString(),
         changeDate: new Date().toLocaleDateString(),
       };
-      if (tableData.length > 0) {
-        newWorker.id = tableData[tableData.length - 1].id + 1;
-        newTableData = [...tableData, newWorker];
-      } else {
-        newWorker.id = 1;
-        newTableData = [newWorker];
-      }
+      newWorker.id = tableData.length > 0 ? tableData[tableData.length - 1].id + 1 : 1;
+      newTableData = [...tableData, newWorker];
     }
     this.saveToStorage(newTableData);
   };
@@ -76,8 +67,6 @@ class App extends Component {
       localStorage.setItem("myCompanyWorkers", JSON.stringify(data));
       this.setState({
         tableData: data,
-        changingName: "",
-        changingDepartment: "choose",
         changingId: null,
       });
     } catch {
@@ -86,15 +75,15 @@ class App extends Component {
   };
 
   render() {
-    const { tableData } = this.state;
+    const { tableData, changingId } = this.state;
+    let changingData = {};
+    if (changingId) {
+      changingData = tableData.find((el) => el.id === changingId);
+    }
+    const { name = "", department = "choose" } = changingData;
     return (
       <div className={styles.wrapper}>
-        <Form
-          name={this.state.changingName}
-          department={this.state.changingDepartment}
-          changingId={this.state.changingId}
-          saveWorker={this.saveWorker}
-        />
+        <Form name={name} department={department} changingId={changingId} saveWorker={this.saveWorker} />
         <div className={styles.table_name}>Employees of the company "Horns and Hooves"</div>
         <Table tableData={tableData} fillFormForChange={this.fillFormForChange} deleteWorker={this.deleteWorker} />
       </div>

@@ -55,8 +55,9 @@ class App extends Component {
         department: incomeDepartment,
         creationDate: new Date().toLocaleDateString(),
         changeDate: new Date().toLocaleDateString(),
+        id: tableData.length > 0 ? tableData[tableData.length - 1].id + 1 : 1,
       };
-      newWorker.id = tableData.length > 0 ? tableData[tableData.length - 1].id + 1 : 1;
+
       newTableData = [...tableData, newWorker];
     }
     this.saveToStorage(newTableData);
@@ -80,7 +81,7 @@ class App extends Component {
     if (changingId) {
       changingData = tableData.find((el) => el.id === changingId);
     }
-    const { name = "", department = "choose" } = changingData;
+    const { name, department } = changingData;
     return (
       <div className={styles.wrapper}>
         <Form name={name} department={department} changingId={changingId} saveWorker={this.saveWorker} />

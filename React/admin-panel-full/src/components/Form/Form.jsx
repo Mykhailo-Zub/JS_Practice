@@ -13,15 +13,24 @@ class Form extends Component {
     const { name: prevName } = prevProps;
     const { name, department } = this.props;
     if (prevName !== name) {
-      this.setState({ name, department, isNameOk: !/\W|\d|\s+/gm.test(name) && name !== "", isDepartmentOk: department !== "choose" });
+      this.setState({
+        name: name || "",
+        department: department || "choose",
+        isNameOk: this.checkName(name),
+        isDepartmentOk: department ? department !== "choose" : false,
+      });
     }
+  }
+
+  checkName = (name) => {
+    return name ? !/\W|\d|\s+/gm.test(name) && name !== "" : false;
   }
 
   setName = (e) => {
     const newName = e.target.value;
     this.setState({
       name: newName,
-      isNameOk: !/\W|\d|\s+/gm.test(newName) && newName !== "",
+      isNameOk: this.checkName(newName),
     });
   };
 

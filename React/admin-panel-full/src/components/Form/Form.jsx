@@ -1,30 +1,36 @@
 import React, { Component } from "react";
 import styles from "./Form.module.css";
 
+const initialState = {
+  name: "",
+  department: "choose",
+  isNameOk: false,
+  isDepartmentOk: false,
+};
+
 class Form extends Component {
-  state = {
-    name: "",
-    department: "choose",
-    isNameOk: false,
-    isDepartmentOk: false,
-  };
+  state = initialState;
 
   componentDidUpdate(prevProps) {
-    const { name: prevName } = prevProps;
-    const { name, department } = this.props;
-    if (prevName !== name) {
+    const { changingId: prevId } = prevProps;
+    const { name, department, changingId } = this.props;
+    if (prevId !== changingId) {
       this.setState({
         name: name || "",
         department: department || "choose",
         isNameOk: this.checkName(name),
-        isDepartmentOk: department ? department !== "choose" : false,
+        isDepartmentOk: this.checkDepartment(department),
       });
     }
   }
 
   checkName = (name) => {
     return name ? !/\W|\d|\s+/gm.test(name) && name !== "" : false;
-  }
+  };
+
+  checkDepartment = (department) => {
+    return department ? department !== "choose" : false;
+  };
 
   setName = (e) => {
     const newName = e.target.value;
@@ -36,7 +42,7 @@ class Form extends Component {
 
   setDepartment = (e) => {
     const newDepartment = e.target.value;
-    this.setState({ department: newDepartment, isDepartmentOk: newDepartment !== "choose" });
+    this.setState({ department: newDepartment, isDepartmentOk: this.checkDepartment(newDepartment) });
   };
 
   checkAndSaveWorker = () => {
@@ -44,7 +50,7 @@ class Form extends Component {
     const { name, department, isNameOk, isDepartmentOk } = this.state;
     if (isNameOk && isDepartmentOk) {
       saveWorker(name, department);
-      this.setState({ name: "", department: "choose", isNameOk: false, isDepartmentOk: false });
+      this.setState(initialState);
     } else alert("Please enter correct name and choose department");
   };
 

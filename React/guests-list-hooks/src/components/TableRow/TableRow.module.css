@@ -1,0 +1,28 @@
+.row {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 90px;
+    font-size: 14px;
+    text-align: center;
+}
+
+.name {
+    width: 25%;
+}
+
+.gender {
+    width: 25%;
+}
+
+.age {
+    width: 16%;
+}
+
+.time {
+    width: 16%;
+}
+
+.action {
+    width: 18%;
+}

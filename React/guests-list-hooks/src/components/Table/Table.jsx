@@ -3,6 +3,7 @@ import styles from "./Table.module.css";
 import TableRow from "../TableRow/TableRow";
 
 function Table({ guests, checkGuest }) {
+  const guestsForSort = [...guests];
   return (
     <div className={styles.wrapper}>
       <div className={styles.heading}>
@@ -13,16 +14,12 @@ function Table({ guests, checkGuest }) {
         <div className={styles.action}>The guest came</div>
       </div>
       <div className={styles.tbody}>
-        {guests
+        {guestsForSort
           .sort((a, b) => {
-            if (a.name.toLowerCase() < b.name.toLowerCase()) {
-              return 1;
-            } else return -1;
-          })
-          .sort((a, b) => {
-            if (a.isCome > b.isCome) {
-              return 1;
-            } else return -1;
+            return (
+              (b.isCome < a.isCome) - (a.isCome < b.isCome) ||
+              (b.name.toLowerCase() < a.name.toLowerCase()) - (a.name.toLowerCase() < b.name.toLowerCase())
+            );
           })
           .map((guest, index) => {
             const { id } = guest;

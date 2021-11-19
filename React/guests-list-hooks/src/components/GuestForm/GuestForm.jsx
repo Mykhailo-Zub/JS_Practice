@@ -2,15 +2,15 @@ import React, { useState } from "react";
 import styles from "./GuestForm.module.css";
 
 function GuestForm({ saveGuest }) {
-  const [name, setName] = useState("");
-  const [age, setAge] = useState("");
+  const [name, setName] = useState(null);
+  const [age, setAge] = useState(null);
   const [gender, setGender] = useState("not choose");
-  const [isNameOk, setIsNameOk] = useState(false);
+  const [isNameOk, setIsNameOk] = useState(true);
 
   const changeName = (e) => {
     const name = e.target.value;
     setName(name);
-    if (!/\W|\d|\s+/gm.test(name) && name !== "") {
+    if (!/\W|\d|\s+/gm.test(name) && name) {
       setIsNameOk(true);
     } else setIsNameOk(false);
   };
@@ -24,17 +24,17 @@ function GuestForm({ saveGuest }) {
   };
 
   const checkNameAndSaveGuest = () => {
-    if (isNameOk) {
+    if (isNameOk && name) {
       const guest = {
         name,
         age,
         gender,
       };
+      setName(null);
+      setAge(null);
+      setGender("not choose");
+      setIsNameOk(true);
       saveGuest(guest);
-      setName("");
-      setAge("");
-      setGender("");
-      setIsNameOk(false);
     } else alert("Enter the correct name");
   };
 
@@ -43,7 +43,7 @@ function GuestForm({ saveGuest }) {
       <div className={styles.header}>Add new guest</div>
       <div className={styles.form}>
         <label htmlFor="name">
-          Guest name: <input name="name" type="text" value={name} onChange={changeName} />
+          Guest name: <input name="name" type="text" value={name || ""} onChange={changeName} />
           <div className={`${styles.errorText} ${isNameOk ? `${styles.hidden}` : ""}`}>The name must contain only letters</div>
         </label>
         <label htmlFor="gender">
@@ -57,7 +57,7 @@ function GuestForm({ saveGuest }) {
           </select>
         </label>
         <label htmlFor="age">
-          Guest age: <input name="age" type="number" value={age} onChange={changeAge} />
+          Guest age: <input name="age" type="number" value={age || ""} onChange={changeAge} />
         </label>
       </div>
       <div className={styles.button} onClick={checkNameAndSaveGuest}>

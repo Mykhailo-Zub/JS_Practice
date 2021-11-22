@@ -5,14 +5,10 @@ function GuestForm({ saveGuest }) {
   const [name, setName] = useState(null);
   const [age, setAge] = useState(null);
   const [gender, setGender] = useState("not choose");
-  const [isNameOk, setIsNameOk] = useState(true);
 
   const changeName = (e) => {
     const name = e.target.value;
     setName(name);
-    if (!/\W|\d|\s+/gm.test(name) && name) {
-      setIsNameOk(true);
-    } else setIsNameOk(false);
   };
   const changeAge = (e) => {
     const age = e.target.value;
@@ -23,8 +19,14 @@ function GuestForm({ saveGuest }) {
     setGender(gender);
   };
 
-  const checkNameAndSaveGuest = () => {
-    if (isNameOk && name) {
+  const checkCurrentName = (incomeName = name) => {
+    if (!/\W|\d|\s+/gm.test(incomeName) && incomeName) {
+      return true;
+    } else return false;
+  };
+
+  const checkAndSaveGuest = () => {
+    if (checkCurrentName()) {
       const guest = {
         name,
         age,
@@ -33,7 +35,6 @@ function GuestForm({ saveGuest }) {
       setName(null);
       setAge(null);
       setGender("not choose");
-      setIsNameOk(true);
       saveGuest(guest);
     } else alert("Enter the correct name");
   };
@@ -44,7 +45,9 @@ function GuestForm({ saveGuest }) {
       <div className={styles.form}>
         <label htmlFor="name">
           Guest name: <input name="name" type="text" value={name || ""} onChange={changeName} />
-          <div className={`${styles.errorText} ${isNameOk ? `${styles.hidden}` : ""}`}>The name must contain only letters</div>
+          <div className={`${styles.errorText} ${checkCurrentName() || name === null ? `${styles.hidden}` : ""}`}>
+            The name must contain only letters
+          </div>
         </label>
         <label htmlFor="gender">
           Guest gender:{" "}
@@ -60,7 +63,7 @@ function GuestForm({ saveGuest }) {
           Guest age: <input name="age" type="number" value={age || ""} onChange={changeAge} />
         </label>
       </div>
-      <div className={styles.button} onClick={checkNameAndSaveGuest}>
+      <div className={styles.button} onClick={checkAndSaveGuest}>
         Save guest
       </div>
     </div>

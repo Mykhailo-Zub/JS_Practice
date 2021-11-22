@@ -33,9 +33,9 @@ function App() {
         time: null,
         id: guests.length + 1,
       };
-      setGuests([...guests, newGuest]);
+      setGuests((prevGuests) => [...prevGuests, newGuest]);
     },
-    [guests]
+    [guests.length]
   );
 
   const checkGuest = useCallback(

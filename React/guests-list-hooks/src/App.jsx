@@ -25,22 +25,21 @@ let initialGuests = [
 function App() {
   const [guests, setGuests] = useState(initialGuests);
 
-  const saveGuest = useCallback(
-    (guest) => {
-      const newGuest = {
+  const saveGuest = useCallback((guest) => {
+    setGuests((prevGuests) => [
+      ...prevGuests,
+      {
         ...guest,
         isCome: false,
         time: null,
-        id: guests.length + 1,
-      };
-      setGuests((prevGuests) => [...prevGuests, newGuest]);
-    },
-    [guests.length]
-  );
+        id: prevGuests.length + 1,
+      },
+    ]);
+  }, []);
 
-  const checkGuest = useCallback(
-    (checkedId) => {
-      const checkedGuests = guests.map((guest) => {
+  const checkGuest = useCallback((checkedId) => {
+    setGuests((prevGuests) => {
+      return prevGuests.map((guest) => {
         const { id } = guest;
         if (id === checkedId) {
           return {
@@ -50,10 +49,8 @@ function App() {
           };
         } else return guest;
       });
-      setGuests(checkedGuests);
-    },
-    [guests]
-  );
+    });
+  }, []);
 
   return (
     <div className={styles.wrapper}>

@@ -5,10 +5,12 @@ function GuestForm({ saveGuest }) {
   const [name, setName] = useState(null);
   const [age, setAge] = useState(null);
   const [gender, setGender] = useState("not choose");
+  const [isNameOk, setIsNameOk] = useState(true);
 
   const changeName = (e) => {
     const name = e.target.value;
     setName(name);
+    checkCurrentName(name);
   };
   const changeAge = (e) => {
     const age = e.target.value;
@@ -20,9 +22,9 @@ function GuestForm({ saveGuest }) {
   };
 
   const checkCurrentName = (incomeName = name) => {
-    if (!/\W|\d|\s+/gm.test(incomeName) && incomeName) {
-      return true;
-    } else return false;
+    const valid = !!(!/\W|\d|\s+/gm.test(incomeName) && incomeName);
+    setIsNameOk(valid);
+    return valid;
   };
 
   const checkAndSaveGuest = () => {
@@ -36,7 +38,7 @@ function GuestForm({ saveGuest }) {
       setAge(null);
       setGender("not choose");
       saveGuest(guest);
-    } else alert("Enter the correct name");
+    }
   };
 
   return (
@@ -45,9 +47,7 @@ function GuestForm({ saveGuest }) {
       <div className={styles.form}>
         <label htmlFor="name">
           Guest name: <input name="name" type="text" value={name || ""} onChange={changeName} />
-          <div className={`${styles.errorText} ${checkCurrentName() || name === null ? `${styles.hidden}` : ""}`}>
-            The name must contain only letters
-          </div>
+          <div className={`${styles.errorText} ${isNameOk ? `${styles.hidden}` : ""}`}>The name must contain only letters</div>
         </label>
         <label htmlFor="gender">
           Guest gender:{" "}

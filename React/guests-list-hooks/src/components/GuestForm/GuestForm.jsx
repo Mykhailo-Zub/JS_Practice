@@ -22,7 +22,7 @@ function GuestForm({ saveGuest }) {
   };
 
   const checkCurrentName = (incomeName = name) => {
-    const valid = !!(!/\W|\d|\s+/gm.test(incomeName) && incomeName);
+    const valid = !!(incomeName && !/\W|\d|\s+/gm.test(incomeName));
     setIsNameOk(valid);
     return valid;
   };

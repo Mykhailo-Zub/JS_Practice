@@ -1,0 +1,70 @@
+.wrapper {
+    background-color: rgb(184, 184, 184);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.heading {
+    background-color: rgb(88, 88, 88);
+    color: rgb(230, 230, 230);
+    display: flex;
+    width: 100%;
+    align-items: center;
+    font-size: 14px;
+}
+
+.heading div{
+margin: 10px 10px;
+text-align: center;
+}
+
+.tbody {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+}
+
+.tbody > div:nth-child(2n) {
+    background-color: rgb(143, 143, 143);
+}
+
+.name {
+    width: 20%;
+}
+
+.department {
+    width: 20%;
+}
+
+.created {
+    width: 14%;
+}
+
+.changed {
+    width: 14%;
+}
+
+.action {
+    width: 32%;
+}
+
+.search {
+    margin: 10px auto;
+    width: 500px;
+    height: 30px;
+    padding: 0 30px;
+    border: 0px;
+    border-radius: 5px;
+    background-color: rgb(124, 122, 122);
+    color: #fff;
+  }
+  
+  .search::placeholder {
+    position: absolute;
+    left: 5px;
+    top: 5px;
+  }

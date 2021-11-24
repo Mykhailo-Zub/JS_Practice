@@ -1,0 +1,50 @@
+.row {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 90px;
+    font-size: 14px;
+    text-align: center;
+}
+
+.name {
+    width: 20%;
+}
+
+.department {
+    width: 20%;
+}
+
+.created {
+    width: 14%;
+}
+
+.changed {
+    width: 14%;
+}
+
+.btns {
+    width: 32%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    height: 100%;
+}
+
+.btns div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 160px;
+    height: 35px;
+    text-align: center;
+    color: rgb(255, 255, 255);
+    background-color: rgb(49, 84, 236);
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.btns div:active {
+    transform: scale(0.95);
+}

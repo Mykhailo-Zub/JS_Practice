@@ -17,56 +17,56 @@ function App() {
     }
   }, []);
 
-  const fillFormForChange = useCallback((id) => {
+  const fillFormForChange = (id) => {
     setChangingId(id);
-  }, []);
+  };
 
-  const deleteWorker = useCallback((id, name) => {
-    setTableData((prevTableData) => {
+  const deleteWorker = useCallback(
+    (id, name) => {
       if (window.confirm(`Do you really want to delete ${name}`)) {
-        const newData = prevTableData.filter((el) => el.id !== parseInt(id));
+        const newData = tableData.filter((el) => el.id !== parseInt(id));
         saveToStorage(newData);
         return newData;
       }
-    });
-  }, []);
+    },
+    [tableData]
+  );
 
   const saveWorker = useCallback(
     (incomeName, incomeDepartment) => {
-      setTableData((prevTableData) => {
-        let newTableData;
-        if (changingId) {
-          newTableData = prevTableData.map((el) => {
-            const { id } = el;
-            if (id === changingId) {
-              return {
-                ...el,
-                name: incomeName,
-                department: incomeDepartment,
-                changeDate: new Date().toLocaleDateString(),
-              };
-            }
-            return el;
-          });
-        } else {
-          const newWorker = {
-            name: incomeName,
-            department: incomeDepartment,
-            creationDate: new Date().toLocaleDateString(),
-            changeDate: new Date().toLocaleDateString(),
-            id: prevTableData.length > 0 ? prevTableData[prevTableData.length - 1].id + 1 : 1,
-          };
+      const currentDate = new Date().toLocaleDateString();
+      let newTableData;
+      if (changingId) {
+        newTableData = tableData.map((el) => {
+          const { id } = el;
+          if (id === changingId) {
+            return {
+              ...el,
+              name: incomeName,
+              department: incomeDepartment,
+              changeDate: currentDate,
+            };
+          }
+          return el;
+        });
+      } else {
+        const newWorker = {
+          name: incomeName,
+          department: incomeDepartment,
+          creationDate: currentDate,
+          changeDate: currentDate,
+          id: tableData.length > 0 ? tableData[tableData.length - 1].id + 1 : 1,
+        };
 
-          newTableData = [...prevTableData, newWorker];
-        }
-        saveToStorage(newTableData);
-        return newTableData;
-      });
+        newTableData = [...tableData, newWorker];
+      }
+      saveToStorage(newTableData);
     },
-    [changingId]
+    [tableData, changingId]
   );
 
   const saveToStorage = (data) => {
+    setTableData(data);
     try {
       localStorage.setItem("myCompanyWorkers", JSON.stringify(data));
       setChangingId(null);
@@ -75,11 +75,8 @@ function App() {
     }
   };
 
-  let changingData = {};
-  if (changingId) {
-    changingData = tableData.find((el) => el.id === changingId);
-  }
-  const { name, department } = changingData;
+  const { name = null, department = null } = tableData.find((el) => el.id === changingId) || {};
+
   return (
     <div className={styles.wrapper}>
       <Form name={name} department={department} changingId={changingId} saveWorker={saveWorker} />

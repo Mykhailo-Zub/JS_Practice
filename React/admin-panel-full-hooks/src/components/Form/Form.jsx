@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import styles from "./Form.module.css";
 
-function Form({ name, department, changingId, saveWorker }) {
-  const checkName = (name) => !!(name && !/\W|\d|\s+/gm.test(name));
-  const checkDepartment = (department) => department !== "choose";
+const checkName = (name) => !!(name && !/\W|\d|\s+/gm.test(name));
+const checkDepartment = (department) => department !== "choose";
 
+function Form({ name, department, changingId, saveWorker }) {
   const [formName, setFormName] = useState(name || null);
   const [formDepartment, setFormDepartment] = useState(department || "choose");
   const [isNameOk, setIsNameOk] = useState(true);
@@ -28,11 +28,15 @@ function Form({ name, department, changingId, saveWorker }) {
   };
 
   const checkAndSaveWorker = () => {
-    if (checkName(formName) && checkDepartment(formDepartment)) {
+    const checkedName = checkName(formName);
+    const checkedDepartment = checkDepartment(formDepartment);
+    if (checkedName && checkedDepartment) {
       saveWorker(formName, formDepartment);
+      setFormName(null);
+      setFormDepartment("choose");
     } else {
-      setIsNameOk(checkName(formName));
-      setIsDepartmentOk(checkDepartment(formDepartment));
+      setIsNameOk(checkedName);
+      setIsDepartmentOk(checkedDepartment);
     }
   };
 

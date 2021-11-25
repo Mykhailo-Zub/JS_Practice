@@ -9,7 +9,7 @@ function Table({ tableData, fillFormForChange, deleteWorker }) {
     setSearch(e.target.value);
   };
 
-  const changedTableData = [...tableData];
+  const searchForFilter = (search || "").toLowerCase();
 
   return (
     <div className={styles.wrapper}>
@@ -22,10 +22,10 @@ function Table({ tableData, fillFormForChange, deleteWorker }) {
         <div className={styles.action}>Action</div>
       </div>
       <div className={styles.tbody}>
-        {changedTableData
+        {tableData
           ?.filter((row) => {
             const { name, department } = row;
-            return name.toLowerCase().includes((search || "").toLowerCase()) || department.toLowerCase().includes((search || "").toLowerCase());
+            return name.toLowerCase().includes(searchForFilter) || department.toLowerCase().includes(searchForFilter);
           })
           .map((row, index) => {
             const { name, id } = row;

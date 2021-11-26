@@ -17,24 +17,25 @@ function App() {
     }
   }, []);
 
-  const fillFormForChange = (id) => {
-    setChangingId(id);
-  };
+  useEffect(() => {
+    try {
+      localStorage.setItem("myCompanyWorkers", JSON.stringify(tableData));
+      setChangingId(null);
+    } catch {
+      alert("Writing data to local storage failed!");
+    }
+  }, [tableData]);
 
   const deleteWorker = useCallback(
-    (id, name) => {
-      if (window.confirm(`Do you really want to delete ${name}`)) {
-        const newData = tableData.filter((el) => el.id !== parseInt(id));
-        saveToStorage(newData);
-        return newData;
-      }
+    (id) => {
+      const newData = tableData.filter((el) => el.id !== parseInt(id));
+      setTableData(newData);
     },
     [tableData]
   );
 
   const saveWorker = useCallback(
-    (incomeName, incomeDepartment) => {
-      const currentDate = new Date().toLocaleDateString();
+    (incomeName, incomeDepartment, currentDate) => {
       let newTableData;
       if (changingId) {
         newTableData = tableData.map((el) => {
@@ -60,28 +61,18 @@ function App() {
 
         newTableData = [...tableData, newWorker];
       }
-      saveToStorage(newTableData);
+      setTableData(newTableData);
     },
     [tableData, changingId]
   );
 
-  const saveToStorage = (data) => {
-    setTableData(data);
-    try {
-      localStorage.setItem("myCompanyWorkers", JSON.stringify(data));
-      setChangingId(null);
-    } catch {
-      alert("Writing data to local storage failed!");
-    }
-  };
-
-  const { name = null, department = null } = tableData.find((el) => el.id === changingId) || {};
+  const { name, department } = tableData.find((el) => el.id === changingId) || {};
 
   return (
     <div className={styles.wrapper}>
       <Form name={name} department={department} changingId={changingId} saveWorker={saveWorker} />
       <div className={styles.table_name}>Employees of the company "Horns and Hooves"</div>
-      <Table tableData={tableData} fillFormForChange={fillFormForChange} deleteWorker={deleteWorker} />
+      <Table tableData={tableData} fillFormForChange={setChangingId} deleteWorker={deleteWorker} />
     </div>
   );
 }

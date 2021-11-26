@@ -30,8 +30,9 @@ function Form({ name, department, changingId, saveWorker }) {
   const checkAndSaveWorker = () => {
     const checkedName = checkName(formName);
     const checkedDepartment = checkDepartment(formDepartment);
+    const currentDate = new Date().toLocaleDateString();
     if (checkedName && checkedDepartment) {
-      saveWorker(formName, formDepartment);
+      saveWorker(formName, formDepartment, currentDate);
       setFormName(null);
       setFormDepartment("choose");
     } else {

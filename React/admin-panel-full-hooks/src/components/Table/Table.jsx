@@ -5,15 +5,18 @@ import TableRow from "../TableRow/TableRow";
 function Table({ tableData, fillFormForChange, deleteWorker }) {
   const [search, setSearch] = useState(null);
 
-  const searchHandler = (e) => {
-    setSearch(e.target.value);
+  const deleteHandler = (id, name) => {
+    if (window.confirm(`Do you really want to delete ${name}`)) {
+      deleteWorker(id);
+    }
   };
 
-  const searchForFilter = (search || "").toLowerCase();
+  const validSearch = search || "";
+  const searchForFilter = validSearch.toLowerCase();
 
   return (
     <div className={styles.wrapper}>
-      <input placeholder="&#128269;" className={styles.search} type="search" value={search || ""} onChange={searchHandler} />
+      <input placeholder="&#128269;" className={styles.search} type="search" value={validSearch} onChange={(e) => setSearch(e.target.value)} />
       <div className={styles.heading}>
         <div className={styles.name}>Name</div>
         <div className={styles.department}>Department</div>
@@ -29,7 +32,7 @@ function Table({ tableData, fillFormForChange, deleteWorker }) {
           })
           .map((row, index) => {
             const { name, id } = row;
-            return <TableRow data={row} key={index} changeInfo={() => fillFormForChange(id)} deleteWorker={() => deleteWorker(id, name)} />;
+            return <TableRow data={row} key={index} changeInfo={() => fillFormForChange(id)} deleteWorker={() => deleteHandler(id, name)} />;
           })}
       </div>
     </div>

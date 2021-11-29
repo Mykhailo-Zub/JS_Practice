@@ -1,0 +1,17 @@
+.wrapper {
+    padding-top: 50px;
+}
+
+.wrapper input {
+    background: rgb(207, 207, 207);
+    border: none;
+    border-radius: 5px;
+    outline-color: transparent;
+    outline-width: 0px;
+    font-size: 12px;
+    line-height: 14px;
+    color: #000000;  
+    width: 300px;
+    height: 20px;
+    padding-left: 5px;
+}

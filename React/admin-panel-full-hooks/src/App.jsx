@@ -26,6 +26,12 @@ function App() {
     }
   }, [tableData]);
 
+  const deleteHandler = (id, name) => {
+    if (window.confirm(`Do you really want to delete ${name}`)) {
+      deleteWorker(id);
+    }
+  };
+
   const deleteWorker = useCallback(
     (id) => {
       const newData = tableData.filter((el) => el.id !== parseInt(id));
@@ -72,7 +78,7 @@ function App() {
     <div className={styles.wrapper}>
       <Form name={name} department={department} changingId={changingId} saveWorker={saveWorker} />
       <div className={styles.table_name}>Employees of the company "Horns and Hooves"</div>
-      <Table tableData={tableData} fillFormForChange={setChangingId} deleteWorker={deleteWorker} />
+      <Table tableData={tableData} fillFormForChange={setChangingId} deleteWorker={deleteHandler} />
     </div>
   );
 }

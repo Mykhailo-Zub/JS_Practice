@@ -5,12 +5,6 @@ import TableRow from "../TableRow/TableRow";
 function Table({ tableData, fillFormForChange, deleteWorker }) {
   const [search, setSearch] = useState(null);
 
-  const deleteHandler = (id, name) => {
-    if (window.confirm(`Do you really want to delete ${name}`)) {
-      deleteWorker(id);
-    }
-  };
-
   const validSearch = search || "";
   const searchForFilter = validSearch.toLowerCase();
 
@@ -32,7 +26,7 @@ function Table({ tableData, fillFormForChange, deleteWorker }) {
           })
           .map((row, index) => {
             const { name, id } = row;
-            return <TableRow data={row} key={index} changeInfo={() => fillFormForChange(id)} deleteWorker={() => deleteHandler(id, name)} />;
+            return <TableRow data={row} key={index} changeInfo={() => fillFormForChange(id)} deleteWorker={() => deleteWorker(id, name)} />;
           })}
       </div>
     </div>

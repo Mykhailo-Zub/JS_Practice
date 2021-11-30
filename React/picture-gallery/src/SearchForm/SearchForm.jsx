@@ -3,23 +3,18 @@ import styles from "./SearchForm.module.css";
 
 function SearchForm({ sendSearch }) {
   const [search, setSearch] = useState(null);
-  const [debouncedValue, setDebouncedValue] = useState(search);
 
   const validSearch = search || "";
   const searchForSend = validSearch.toLowerCase();
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setDebouncedValue(searchForSend);
+      sendSearch(searchForSend);
     }, 500);
     return () => {
       clearTimeout(timer);
     };
-  }, [searchForSend]);
-
-  useEffect(() => {
-    sendSearch(debouncedValue);
-  }, [debouncedValue, sendSearch]);
+  }, [searchForSend, sendSearch]);
 
   return (
     <div className={styles.wrapper}>

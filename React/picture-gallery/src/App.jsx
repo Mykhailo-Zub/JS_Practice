@@ -3,66 +3,80 @@ import styles from "./App.module.css";
 import axios from "axios";
 import Image from "./Image/Image";
 import SearchForm from "./SearchForm/SearchForm";
+import Popup from "./Popup/Popup";
 
 const CancelToken = axios.CancelToken;
 let cancel;
 
-const URL = "https://pixabay.com/api/?key=24495411-41c04712dc965e8293a563105";
+async function getImages(search, page) {
+  const URL = "https://pixabay.com/api/";
+  let images;
+  if (cancel !== undefined) cancel();
+  try {
+    images = axios
+      .get(URL, {
+        cancelToken: new CancelToken((c) => (cancel = c)),
+        params: {
+          q: search,
+          page,
+          key: "24495411-41c04712dc965e8293a563105",
+        },
+      })
+      .then((res) => res.data.hits);
+  } catch (err) {
+    console.log(err);
+  }
+  return images;
+}
 
 function App() {
   const [images, setImages] = useState([]);
   const [search, setSearch] = useState(null);
-  const [perPage, setPerPage] = useState(20);
-  const [end, setEnd] = useState(false);
+  const [page, setPage] = useState(1);
+  const [popUp, setPopUp] = useState("");
 
   useEffect(() => {
-    const url = `${URL}&q=${search || ""}&per_page=${perPage}`;
-    async function getImages() {
-      const images = await new Promise((resolve, reject) => {
-        if (cancel !== undefined) cancel();
-        try {
-          axios
-            .get(url, {
-              cancelToken: new CancelToken((c) => (cancel = c)),
-            })
-            .then((res) => {
-              resolve(res.data.hits);
-            });
-        } catch {
-          reject(null);
-        }
-      });
-      setImages(images);
+    if (search !== null || page !== 1) {
+      (async () => {
+        const images = await getImages(search, page);
+        setImages((prevImages) => [...prevImages, ...images]);
+      })();
     }
-    getImages();
-  }, [search, perPage]);
+  }, [search, page]);
+
+  useEffect(() => {
+    const offset = window.innerWidth;
+    const client = document.body.clientWidth;
+    const margin = offset - client;
+    document.body.style.overflow = popUp ? "hidden" : "auto";
+    document.body.style.marginRight = popUp ? `${margin}px` : "0";
+  }, [popUp]);
 
   const handleSearch = useCallback((query) => {
+    setImages([]);
     setSearch(query);
-    setPerPage(20);
-    setEnd(false);
+    setPage(1);
   }, []);
-
-  const handleLoadMore = () => {
-    if (!end) {
-      setPerPage((prevPerPage) => (prevPerPage += 20));
-    }
-    if (images.length < perPage || perPage === 180) {
-      setEnd(true);
-    }
-  };
 
   return (
     <div className={styles.mainWrapper}>
+      <Popup fullSource={popUp} popUpHandler={() => setPopUp(null)} />
       <h1 className={styles.headeeng}>Picture Gallery</h1>
       <div className={styles.galleryWrapper}>
         <SearchForm sendSearch={handleSearch} />
         <div className={styles.picturesWrapper}>
           {images.map((el) => {
             const { webformatURL, largeImageURL, id, tags } = el;
-            return <Image previewSource={webformatURL} fullSource={largeImageURL} tags={tags} key={id} />;
+            return (
+              <Image previewSource={webformatURL} fullSource={largeImageURL} tags={tags} key={id} popUpHandler={() => setPopUp(largeImageURL)} />
+            );
           })}
-          <div onClick={handleLoadMore} className={end || images.length < 20 ? styles.hidden : styles.moreBtn}>
+          <div
+            onClick={() => {
+              setPage((prevPage) => (prevPage += 1));
+            }}
+            className={images.length < page * 20 ? styles.hidden : styles.moreBtn}
+          >
             <div className={styles.help}>Show more pictures...</div>
             <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="100" height="100" viewBox="0 0 100 100" style={{ fill: "#000000" }}>
               {" "}

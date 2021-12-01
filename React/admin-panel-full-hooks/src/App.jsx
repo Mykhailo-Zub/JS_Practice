@@ -20,22 +20,20 @@ function App() {
     }
   }, []);
 
-  useEffect(() => {
-    if (isChangedData) {
-      try {
-        localStorage.setItem("myCompanyWorkers", JSON.stringify(tableData));
-        setChangingId(null);
-      } catch {
-        alert("Writing data to local storage failed!");
-      }
+  const saveToStorage = (tableData) => {
+    try {
+      localStorage.setItem("myCompanyWorkers", JSON.stringify(tableData));
+      setChangingId(null);
+    } catch {
+      alert("Writing data to local storage failed!");
     }
-  }, [tableData, isChangedData]);
+  };
 
   const deleteWorker = useCallback(
     (id) => {
       const newData = tableData.filter((el) => el.id !== parseInt(id));
       setTableData(newData);
-      setIsChangedData(true);
+      saveToStorage(newData);
     },
     [tableData]
   );
@@ -74,7 +72,7 @@ function App() {
         newTableData = [...tableData, newWorker];
       }
       setTableData(newTableData);
-      setIsChangedData(true);
+      saveToStorage(newTableData);
     },
     [tableData, changingId]
   );

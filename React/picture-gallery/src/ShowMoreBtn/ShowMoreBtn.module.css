@@ -1,0 +1,51 @@
+.moreBtn:hover {
+    transform: scale(1.05);
+    transition: all 0.3s linear;
+}
+
+.moreBtn {
+    border: 2px solid black;
+    margin: 20px;
+    width: 320px;
+    height: 216px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgb(117, 115, 115);
+    position: relative;
+}
+
+.help {
+    position: absolute;
+    top: -47px;
+    left: -65px;
+    visibility: hidden;
+    opacity: 0;
+    width: 200px;
+    height: 30px;
+    background: #000;
+    color: #fff;
+    transition: all 0.5s linear;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.help::after {
+    content: '';
+    position: absolute;
+    top: 30px;
+    right: 10px;
+	border: 15px solid transparent; 
+    border-top: 15px solid black;
+}
+
+.moreBtn:hover .help {
+    visibility: visible;
+    opacity: 1;
+}
+
+.hidden {
+    display: none;
+}

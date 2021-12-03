@@ -27,8 +27,13 @@
 }
 
 .popup img{
+    display: none;
     opacity: inherit;
     visibility: inherit;
     max-width: 80vw;
     max-height: 90vh;
+}
+
+.popupActive img {
+    display: block;
 }

@@ -1,9 +1,9 @@
 import React from "react";
 import styles from "./ShowMoreBtn.module.css";
 
-function ShowMoreBtn({ length, page, pageHandler }) {
+function ShowMoreBtn({ isHiden, pageHandler }) {
   return (
-    <div onClick={pageHandler} className={length < page * 20 ? styles.hidden : styles.moreBtn}>
+    <div onClick={pageHandler} className={isHiden ? styles.hidden : styles.moreBtn}>
       <div className={styles.help}>Show more pictures...</div>
       <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="100" height="100" viewBox="0 0 100 100" style={{ fill: "#000000" }}>
         {" "}

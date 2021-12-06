@@ -9,7 +9,11 @@ import ShowMoreBtn from "./ShowMoreBtn/ShowMoreBtn";
 const CancelToken = axios.CancelToken;
 let cancel;
 
-function getImages(search, page) {
+function getImages(search, page, onlySearch) {
+  let correctedPage = page;
+  if (onlySearch) {
+    correctedPage = 1;
+  }
   const URL = "https://pixabay.com/api/";
   let images;
   if (cancel !== undefined) cancel();
@@ -18,7 +22,7 @@ function getImages(search, page) {
       cancelToken: new CancelToken((c) => (cancel = c)),
       params: {
         q: search,
-        page,
+        page: correctedPage,
         key: "24495411-41c04712dc965e8293a563105",
       },
     })
@@ -36,13 +40,21 @@ function App() {
   const [page, setPage] = useState(1);
   const [popUp, setPopUp] = useState(null);
 
+  const getAndSetImages = (onlySearch) => {
+    getImages(search, page, onlySearch).then((images) => {
+      setImages((prevImages) => [...prevImages, ...images]);
+    });
+  };
+
   useEffect(() => {
-    if (search !== null || page !== 1) {
-      getImages(search, page).then((images) => {
-        setImages((prevImages) => [...prevImages, ...images]);
-      });
+    getAndSetImages(true);
+  }, [search]);
+
+  useEffect(() => {
+    if (page !== 1) {
+      getAndSetImages();
     }
-  }, [search, page]);
+  }, [page]);
 
   const pageHandler = useCallback(() => {
     setPage((prevPage) => (prevPage += 1));
@@ -65,11 +77,11 @@ function App() {
       <div className={styles.galleryWrapper}>
         <SearchForm sendSearch={handleSearch} />
         <div className={styles.picturesWrapper}>
-          {images.map((el) => {
-            const { webformatURL, largeImageURL, id, tags } = el;
-            return <Image previewSource={webformatURL} fullSource={largeImageURL} tags={tags} key={id} popUpHandler={setPopUp} />;
+          {images.map((el, i) => {
+            const { webformatURL, largeImageURL, tags } = el;
+            return <Image previewSource={webformatURL} fullSource={largeImageURL} tags={tags} key={i} popUpHandler={setPopUp} />;
           })}
-          <ShowMoreBtn isHidden={images.length < page * 20} pageHandler={pageHandler} />
+          <ShowMoreBtn isHiden={images.length < page * 20} pageHandler={pageHandler} />
         </div>
       </div>
     </div>

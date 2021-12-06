@@ -5,16 +5,18 @@ function SearchForm({ sendSearch }) {
   const [search, setSearch] = useState(null);
 
   const validSearch = search || "";
-  const searchForSend = validSearch.toLowerCase();
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      sendSearch(searchForSend);
-    }, 500);
-    return () => {
-      clearTimeout(timer);
-    };
-  }, [searchForSend, sendSearch]);
+    if (search !== null) {
+      const searchForSend = search.toLowerCase();
+      const timer = setTimeout(() => {
+        sendSearch(searchForSend);
+      }, 500);
+      return () => {
+        clearTimeout(timer);
+      };
+    }
+  }, [search, sendSearch]);
 
   return (
     <div className={styles.wrapper}>

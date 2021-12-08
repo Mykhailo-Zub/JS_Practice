@@ -1,0 +1,98 @@
+.wrapper {
+    background: rgba(0, 0, 0, 0.8);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.heading {
+    color: #fff;
+    margin: 0 auto 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.wrapper label {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.wrapper label div:last-child {
+    font-size: 30px;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    opacity: 0.6;
+    margin-left: 120px;
+    align-self: start;
+}
+
+.buttons {
+    width: 100%;
+    margin: 50px auto;
+}
+
+.buttons > div {
+    margin-top: 30px;
+    cursor: pointer;
+}
+
+input {
+    width: 80%;
+    height: 60px;
+    margin: 30px auto 0px;
+    font-size: 50px;
+    border-radius: 20px;
+    border: 7px solid transparent;
+    padding-left: 20px;
+}
+
+label span {
+    position: absolute;
+    display: none;
+    font-size: 20px;
+    top: -38px;
+    padding: 10px 15px;
+    background-color: rgba(226, 80, 122, 1);
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+}
+label span::after {
+    content: '';
+    position: absolute;
+    top: 40px;
+    border: 20px solid transparent; 
+    border-top: 20px solid rgba(226, 80, 122, 1);
+}
+
+.firstNameError span, .lastNameError span, .phoneError span {
+    display: flex;
+}
+.firstNameError input, .lastNameError input, .phoneError input {
+    border: 7px solid rgba(226, 80, 122, 1);
+}
+
+label div:nth-child(2) {
+    position: absolute;
+    top: 30px;
+    left: 115px;
+    color: black;
+}
+
+.phone {
+    width: calc(80% - 40px);
+    padding-left: 60px;
+}

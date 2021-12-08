@@ -9,11 +9,7 @@ import ShowMoreBtn from "./ShowMoreBtn/ShowMoreBtn";
 const CancelToken = axios.CancelToken;
 let cancel;
 
-function getImages(search, page, onlySearch) {
-  let correctedPage = page;
-  if (onlySearch) {
-    correctedPage = 1;
-  }
+function getImages(search, page = 1) {
   const URL = "https://pixabay.com/api/";
   let images;
   if (cancel !== undefined) cancel();
@@ -22,7 +18,7 @@ function getImages(search, page, onlySearch) {
       cancelToken: new CancelToken((c) => (cancel = c)),
       params: {
         q: search,
-        page: correctedPage,
+        page,
         key: "24495411-41c04712dc965e8293a563105",
       },
     })
@@ -40,19 +36,19 @@ function App() {
   const [page, setPage] = useState(1);
   const [popUp, setPopUp] = useState(null);
 
-  const getAndSetImages = (onlySearch) => {
-    getImages(search, page, onlySearch).then((images) => {
+  const getAndSetImages = (searchingPage) => {
+    getImages(search, searchingPage).then((images) => {
       setImages((prevImages) => [...prevImages, ...images]);
     });
   };
 
   useEffect(() => {
-    getAndSetImages(true);
+    getAndSetImages();
   }, [search]);
 
   useEffect(() => {
     if (page !== 1) {
-      getAndSetImages();
+      getAndSetImages(page);
     }
   }, [page]);
 

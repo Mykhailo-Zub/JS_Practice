@@ -1,59 +1,27 @@
 import React, { useCallback, useEffect, useState } from "react";
-import axios from "axios";
 import Contacts from "./Contacts/Contacts";
-import ReactDOM from "react-dom";
 import EditPopup from "./EditPopup/EditPopup";
 import DeletePopup from "./DeletePopup/DeletePopup";
 import FullContact from "./FullContact/FullContact";
-
-const popUpParent = document.body;
-
-const GET = "Read";
-const POST = "Create";
-const PUT = "Update";
-const DELETE = "Delete";
-
-function sendRequestToDB(operation, contact, id) {
-  const data = {
-    table: "contacts",
-  };
-  if (contact) {
-    data.record = contact;
-  }
-  if (id) {
-    data.id = id;
-  }
-  const requestData = JSON.stringify(data);
-  const url = `https://api.m3o.com/v1/db/${operation}`;
-  return axios.post(url, requestData, {
-    headers: { "Content-Type": "application/json", Authorization: "Bearer ZGQ2NDgwNmYtZWJlNC00NDIwLWFhOWEtOTM5MTFkZDc1ZGFl" },
-  });
-}
+import { deleteSelectedContact, getAllContacts, saveContact } from "./requests";
 
 function App() {
   const [contacts, setContacts] = useState([]);
   const [isEditPopup, setIsEditPopup] = useState(false);
   const [isDeletePopup, setIsDeletePopup] = useState(false);
-  const [isFullContact, setIsFullContact] = useState(false);
-  const [focusContact, setFocusContact] = useState(null);
+  const [focusContactId, setFocusContactId] = useState(null);
 
   const getAndSetContacts = () => {
-    sendRequestToDB(GET).then((res) => {
-      setContacts(res.data.records);
-    });
+    getAllContacts().then(setContacts);
   };
 
   useEffect(() => {
     getAndSetContacts();
   }, []);
 
-  const fullContactHandler = useCallback(
-    (id) => {
-      setFocusContact(contacts.find((el) => el.id === id));
-      setIsFullContact(true);
-    },
-    [contacts]
-  );
+  const fullContactHandler = useCallback((id) => {
+    setFocusContactId(id);
+  }, []);
 
   const editHandler = useCallback(() => {
     setIsEditPopup(true);
@@ -64,8 +32,7 @@ function App() {
   }, []);
 
   const backHandler = useCallback(() => {
-    setFocusContact(null);
-    setIsFullContact(false);
+    setFocusContactId(null);
   }, []);
 
   const popupCloseHandler = useCallback(() => {
@@ -74,48 +41,43 @@ function App() {
   }, []);
 
   const deleteConfirmHandler = useCallback(() => {
-    const { id } = focusContact;
-    sendRequestToDB(DELETE, null, id).then(() => {
+    deleteSelectedContact(focusContactId).then(() => {
       getAndSetContacts();
     });
     popupCloseHandler();
     backHandler();
-  }, [focusContact, backHandler, popupCloseHandler]);
+  }, [focusContactId, backHandler, popupCloseHandler]);
 
   const saveConfirmHandler = useCallback(
     (contact) => {
-      const { id = null } = focusContact || {};
-      sendRequestToDB(id ? PUT : POST, contact, id).then(() => {
+      saveContact(contact, focusContactId).then(() => {
         getAndSetContacts();
       });
       popupCloseHandler();
       backHandler();
     },
-    [focusContact, backHandler, popupCloseHandler]
+    [focusContactId, backHandler, popupCloseHandler]
   );
 
-  const editPopPortal = ReactDOM.createPortal(
-    <EditPopup contact={focusContact} confirmHandler={saveConfirmHandler} closeHandler={popupCloseHandler} />,
-    popUpParent
-  );
-  const deletePopPortal = ReactDOM.createPortal(
-    <DeletePopup contact={focusContact} confirmHandler={deleteConfirmHandler} closeHandler={popupCloseHandler} />,
-    popUpParent
-  );
+  const focusContact = contacts.find((el) => el.id === focusContactId);
 
-  if (isFullContact) {
+  const editPopPortal = <EditPopup contact={focusContact} confirmHandler={saveConfirmHandler} closeHandler={popupCloseHandler} />;
+
+  const deletePopPortal = <DeletePopup contact={focusContact} confirmHandler={deleteConfirmHandler} closeHandler={popupCloseHandler} />;
+
+  if (focusContactId) {
     return (
       <>
-        {isEditPopup ? editPopPortal : ""}
-        {isDeletePopup ? deletePopPortal : ""}
+        {isEditPopup ? editPopPortal : null}
+        {isDeletePopup ? deletePopPortal : null}
         <FullContact contact={focusContact} editContact={editHandler} deleteContact={deleteHandler} goBack={backHandler} />
       </>
     );
   } else {
     return (
       <>
-        {isEditPopup ? editPopPortal : ""}
-        <Contacts contacts={contacts} fullContactHandler={fullContactHandler} addButton={setIsEditPopup} />
+        {isEditPopup ? editPopPortal : null}
+        <Contacts contacts={contacts} fullContactHandler={fullContactHandler} addButton={editHandler} />
       </>
     );
   }

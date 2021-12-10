@@ -51,7 +51,7 @@
 
 input {
     width: 80%;
-    height: 60px;
+    height: 70px;
     margin: 30px auto 0px;
     font-size: 50px;
     border-radius: 20px;
@@ -87,12 +87,12 @@ label span::after {
 
 label div:nth-child(2) {
     position: absolute;
-    top: 30px;
-    left: 115px;
+    top: 26px;
+    left: 128px;
     color: black;
 }
 
 .phone {
-    width: calc(80% - 40px);
+    width: 80%;
     padding-left: 60px;
 }

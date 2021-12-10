@@ -15,24 +15,6 @@ function EditPopup({ contact, confirmHandler, closeHandler }) {
   const [phoneForm, setPhoneForm] = useState(phone ? phone.toString().slice(1) : phone);
   const [phoneOk, setPhoneOk] = useState(true);
 
-  const nameHandler = (e) => {
-    const firstName = e.target.value;
-    checkFirstName(firstName);
-    setFirstNameForm(firstName);
-  };
-
-  const lastNameHandler = (e) => {
-    const lastName = e.target.value;
-    checkLastName(lastName);
-    setLastNameForm(lastName);
-  };
-
-  const phoneHandler = (e) => {
-    const phone = e.target.value;
-    checkPhone(phone);
-    setPhoneForm(phone);
-  };
-
   const checkFirstName = (firstName) => {
     const checkResult = firstName && firstName.length < 10 ? true : false;
     setFirstNameOk(checkResult);
@@ -49,6 +31,24 @@ function EditPopup({ contact, confirmHandler, closeHandler }) {
     const checkResult = phone && phone.length === 12 ? true : false;
     setPhoneOk(checkResult);
     return checkResult;
+  };
+
+  const nameHandler = (e) => {
+    const firstName = e.target.value;
+    checkFirstName(firstName);
+    setFirstNameForm(firstName);
+  };
+
+  const lastNameHandler = (e) => {
+    const lastName = e.target.value;
+    checkLastName(lastName);
+    setLastNameForm(lastName);
+  };
+
+  const phoneHandler = (e) => {
+    const phone = e.target.value;
+    checkPhone(phone);
+    setPhoneForm(phone);
   };
 
   const checkAllFields = (firstName, lastName, phone) => {

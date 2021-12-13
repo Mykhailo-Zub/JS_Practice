@@ -25,3 +25,10 @@ code {
 input {
   outline: none;
 }
+
+@media screen and (max-width: 1024px) {
+  body {
+    font-size: 6vw;
+  }
+  
+}

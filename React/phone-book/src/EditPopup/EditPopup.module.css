@@ -96,3 +96,56 @@ label div:nth-child(2) {
     width: 80%;
     padding-left: 60px;
 }
+
+@media screen and (max-width: 1024px) {    
+    .heading {
+        margin: 0 auto 6vw;
+    }
+    
+    
+    .wrapper label div:last-child {
+        font-size: 3vw;
+        margin-left: 12vw;
+    }
+    
+    .buttons {
+        margin: 5vw auto;
+    }
+    
+    .buttons > div {
+        margin-top: 3vw;
+    }
+    
+    input {
+        height: 9vw;
+        margin: 3vw auto 0px;
+        font-size: 5vw;
+        border-radius: 2vw;
+        border: 1vw solid transparent;
+        padding-left: 2vw;
+    }
+    
+    label span {
+        font-size: 2vw;
+        top: -4vw;
+        padding: 1vw 2vw;
+    }
+    label span::after {
+        top: 4vw;
+        border: 2vw solid transparent; 
+        border-top: 2vw solid rgba(226, 80, 122, 1);
+    }
+    
+    .firstNameError input, .lastNameError input, .phoneError input {
+        border: 1vw solid rgba(226, 80, 122, 1);
+    }
+    
+    label div:nth-child(2) {
+        top: 3.7vw;
+        left: 13vw;
+    }
+    
+    .phone {
+        padding-left: 6vw;
+    }
+}

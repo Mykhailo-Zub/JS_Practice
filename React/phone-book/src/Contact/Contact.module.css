@@ -21,3 +21,19 @@
 .phone {
     opacity: 0.8;
 }
+
+@media screen and (max-width: 1024px) {
+    .nameWrapper div:last-child {
+        margin-left: 2vw;
+    } 
+
+    .wrapper img {
+        width: 11vw;
+        height: 11vw;
+        margin-right: 3vw;
+    }
+
+    .wrapper {
+        margin-top: 2vw;
+    }
+}

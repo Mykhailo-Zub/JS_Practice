@@ -13,3 +13,9 @@
 .red {
     background: linear-gradient(0deg, rgba(214,3,106,1) 0%, rgba(190,8,8,1) 100%);
 }
+
+@media screen and (max-width: 1024px) {
+    .wrapper {
+        height: 10vw;
+    }
+}

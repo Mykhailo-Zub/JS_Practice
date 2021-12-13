@@ -59,28 +59,26 @@ function App() {
     [focusContactId, backHandler, popupCloseHandler]
   );
 
-  const focusContact = contacts.find((el) => el.id === focusContactId);
+  const focusContact = useCallback(
+    contacts.find((el) => el.id === focusContactId),
+    [contacts, focusContactId]
+  );
 
   const editPopPortal = <EditPopup contact={focusContact} confirmHandler={saveConfirmHandler} closeHandler={popupCloseHandler} />;
 
   const deletePopPortal = <DeletePopup contact={focusContact} confirmHandler={deleteConfirmHandler} closeHandler={popupCloseHandler} />;
 
-  if (focusContactId) {
-    return (
-      <>
-        {isEditPopup ? editPopPortal : null}
-        {isDeletePopup ? deletePopPortal : null}
-        <FullContact contact={focusContact} editContact={editHandler} deleteContact={deleteHandler} goBack={backHandler} />
-      </>
-    );
-  } else {
-    return (
-      <>
-        {isEditPopup ? editPopPortal : null}
-        <Contacts contacts={contacts} fullContactHandler={fullContactHandler} addButton={editHandler} />
-      </>
-    );
-  }
+  const fullContactComponent = <FullContact contact={focusContact} editContact={editHandler} deleteContact={deleteHandler} goBack={backHandler} />;
+
+  const contactsComponent = <Contacts contacts={contacts} fullContactHandler={fullContactHandler} addButton={editHandler} />;
+
+  return (
+    <>
+      {isEditPopup ? editPopPortal : null}
+      {isDeletePopup ? deletePopPortal : null}
+      {focusContactId ? fullContactComponent : contactsComponent}
+    </>
+  );
 }
 
 export default App;

@@ -12,23 +12,23 @@ function EditPopup({ contact, confirmHandler, closeHandler }) {
   const [firstNameOk, setFirstNameOk] = useState(true);
   const [lastNameForm, setLastNameForm] = useState(lastName);
   const [lastNameOk, setLastNameOk] = useState(true);
-  const [phoneForm, setPhoneForm] = useState(phone ? phone.toString().slice(1) : phone);
+  const [phoneForm, setPhoneForm] = useState(() => (phone ? phone.toString().slice(1) : phone));
   const [phoneOk, setPhoneOk] = useState(true);
 
   const checkFirstName = (firstName) => {
-    const checkResult = firstName && firstName.length < 10 ? true : false;
+    const checkResult = Boolean(firstName && firstName.length < 10);
     setFirstNameOk(checkResult);
     return checkResult;
   };
 
   const checkLastName = (lastName) => {
-    const checkResult = lastName && lastName.length < 20 ? true : false;
+    const checkResult = Boolean(lastName && lastName.length < 20);
     setLastNameOk(checkResult);
     return checkResult;
   };
 
   const checkPhone = (phone) => {
-    const checkResult = phone && phone.length === 12 ? true : false;
+    const checkResult = Boolean(phone && phone.length === 12);
     setPhoneOk(checkResult);
     return checkResult;
   };

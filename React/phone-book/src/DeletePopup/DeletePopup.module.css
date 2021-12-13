@@ -31,3 +31,18 @@
     margin-top: 30px;
     cursor: pointer;
 }
+
+
+@media screen and (max-width: 1024px) { 
+    .heading {
+        margin: 0 auto 6vw;
+    }
+    
+    .buttons {
+        margin: 5vw auto;
+    }
+    
+    .buttons > div {
+        margin-top: 3vw;
+    }
+}

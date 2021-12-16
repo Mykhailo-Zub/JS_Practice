@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import Contacts from "./Contacts/Contacts";
 import EditPopup from "./EditPopup/EditPopup";
 import DeletePopup from "./DeletePopup/DeletePopup";
@@ -59,10 +59,9 @@ function App() {
     [focusContactId, backHandler, popupCloseHandler]
   );
 
-  const focusContact = useCallback(
-    contacts.find((el) => el.id === focusContactId),
-    [contacts, focusContactId]
-  );
+  const focusContact = useMemo(() => {
+    return contacts.find((el) => el.id === focusContactId);
+  }, [contacts, focusContactId]);
 
   const editPopPortal = <EditPopup contact={focusContact} confirmHandler={saveConfirmHandler} closeHandler={popupCloseHandler} />;
 

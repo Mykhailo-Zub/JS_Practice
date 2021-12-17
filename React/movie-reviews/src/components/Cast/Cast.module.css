@@ -1,0 +1,22 @@
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.characters {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.characters > div {
+    margin: 40px;
+}
+
+.back {
+    cursor: pointer;
+    align-self: start;
+    margin: 20px 30px;
+    font-size: 30px;
+  }

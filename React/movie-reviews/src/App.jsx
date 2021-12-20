@@ -1,29 +1,27 @@
-import React, { useState, useEffect } from "react";
-import { getTrandingMovies } from "./requests";
+import React from "react";
 import { Route, Routes, Navigate } from "react-router";
 import "./App.css";
-import Main from "./components/Main/Main";
-import Movie from "./components/Movie/Movie";
+import RoutesWrapper from "./components/RoutesWrapper/RoutesWrapper";
+import FullMovieInfo from "./components/FullMovieInfo/FullMovieInfo";
 import Cast from "./components/Cast/Cast";
 import Reviews from "./components/Reviews/Reviews";
+import Movies from "./components/Movies/Movies";
 
 function App() {
-  const [movies, setMovies] = useState(null);
-
-  useEffect(() => {
-    getTrandingMovies().then(setMovies);
-  }, []);
-
   return (
-    <div className="App">
+    <>
       <Routes>
-        <Route index element={<Main movies={movies} />} />
-        <Route path="movie/:id" element={<Movie />} />
-        <Route path="movie/:id/cast" element={<Cast />} />
-        <Route path="movie/:id/reviews" element={<Reviews />} />
-        <Route path="*" element={<Navigate replace to="/" />} />
+        <Route path="/" element={<RoutesWrapper isMain={true} />}>
+          <Route index element={<Movies />} />
+          <Route path="movie/:id" element={<RoutesWrapper />}>
+            <Route index element={<FullMovieInfo />} />
+            <Route path="cast" element={<Cast />} />
+            <Route path="reviews" element={<Reviews />} />
+          </Route>
+          <Route path="*" element={<Navigate replace to="/" />} />
+        </Route>
       </Routes>
-    </div>
+    </>
   );
 }
 

@@ -6,11 +6,9 @@ function RoutesWrapper({ isMain }) {
   const navigate = useNavigate();
   return (
     <div className={styles.wrapper}>
-      {isMain ? null : (
-        <div className={styles.back} onClick={() => navigate(-1)}>
-          {"<<"} Back
-        </div>
-      )}
+      <div className={styles.back} onClick={() => navigate(-1)}>
+        {"<<"} Back
+      </div>
       <Outlet />
     </div>
   );

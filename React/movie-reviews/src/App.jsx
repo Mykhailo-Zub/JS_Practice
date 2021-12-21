@@ -11,15 +11,13 @@ function App() {
   return (
     <>
       <Routes>
-        <Route path="/" element={<RoutesWrapper isMain={true} />}>
-          <Route index element={<Movies />} />
-          <Route path="movie/:id" element={<RoutesWrapper />}>
-            <Route index element={<FullMovieInfo />} />
-            <Route path="cast" element={<Cast />} />
-            <Route path="reviews" element={<Reviews />} />
-          </Route>
-          <Route path="*" element={<Navigate replace to="/" />} />
+        <Route path="/" element={<Movies />} />
+        <Route path="movie/:id" element={<RoutesWrapper />}>
+          <Route index element={<FullMovieInfo />} />
+          <Route path="cast" element={<Cast />} />
+          <Route path="reviews" element={<Reviews />} />
         </Route>
+        <Route path="*" element={<Navigate replace to="/" />} />
       </Routes>
     </>
   );

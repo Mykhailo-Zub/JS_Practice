@@ -17,3 +17,9 @@
   right: 0;
   top: 0;
 }
+
+.notFound {
+  margin-top: 50px;
+  font-size: 30px;
+  font-weight: 700;
+}

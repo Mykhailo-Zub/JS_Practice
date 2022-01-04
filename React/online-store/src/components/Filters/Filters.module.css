@@ -2,4 +2,94 @@
     background-color: chocolate;
     width: 400px;
     height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding: 50px 30px;
+    align-items: center;
+    font-size: 20px;
+}
+
+.header {
+    font-size: 35px;
+}
+
+.textBlock {
+    display: flex;
+    width: 100%;
+    margin-top: 25px;
+}
+
+.textBlock label {
+    width: 40%;
+}
+
+.textBlock input {
+    width: 60%;
+    height: 30px;
+    font-size: 20px;
+}
+
+.priceBlock {
+    margin-top: 25px;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.blockName {
+    width: 20%;
+}
+
+.priceSlider {
+    width: 80%;
+}
+
+.memoryBlock {
+    margin-top: 25px;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.memoryBlock label {
+    width: 25%;
+}
+
+select {
+    height: 30px;
+    width: 75%;
+    font-size: 20px;
+}
+
+.screenBlock {
+    margin-top: 25px;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.screenBlock label {
+    font-size: 20px;
+    font-weight: 800;
+    margin-left: 15px;
+}
+
+.screenBlock input {
+    width: 18px;
+    height: 18px;
+}
+
+button {
+    margin-top: 25px;
+    width: 200px;
+    height: 40px;
+    font-size: 25px;
+    background: #5496d8;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+}
+
+button:hover {
+    transform: scale(1.05);
 }

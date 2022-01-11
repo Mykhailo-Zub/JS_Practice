@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
 import Slider from "@mui/material/Slider";
 import styles from "./Filters.module.css";
 
-function Filters({ prices, memory, screen }) {
-  const [searchParams, setSearchParams] = useSearchParams();
+function Filters({ prices, memory, screen, searchParams, setSearchParams }) {
   const [price, setPrice] = useState([0, 100]);
   const [minMaxPrice, setMinMaxPrice] = useState([0, 100]);
   const [text, setText] = useState(null);
@@ -15,26 +13,19 @@ function Filters({ prices, memory, screen }) {
     const min = prices?.[0] || 0;
     const max = prices?.[prices.length - 1] || 100;
     setMinMaxPrice([min, max]);
-    const currentPrice = searchParams
-      .get("price")
-      ?.split("-")
-      .map((el) => parseInt(el));
-    setPrice(currentPrice || [min, max]);
+    setPrice(searchParams.price || [min, max]);
   }, [prices, searchParams]);
 
   useEffect(() => {
-    const currentText = searchParams.get("text");
-    setText(currentText);
-    const currentMemory = searchParams.get("memory");
-    setMemoryFilter(currentMemory || "All");
+    setText(searchParams.text);
+    setMemoryFilter(searchParams.memory || "All");
   }, [searchParams]);
 
   useEffect(() => {
     const values = [];
-    const currentScreen = searchParams.get("screen");
     screen.forEach((el, i) => {
-      if (currentScreen) {
-        if (currentScreen.includes(el.toString())) {
+      if (searchParams.screen) {
+        if (searchParams.screen.includes(el.toString())) {
           values[i] = true;
         } else {
           values[i] = false;

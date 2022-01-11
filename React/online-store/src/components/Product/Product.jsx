@@ -1,9 +1,7 @@
 import React from "react";
 import styles from "./Product.module.css";
 
-function Product({ description, img, name, price }) {
-  const descriptionArr = description.split("/");
-  const [screen, resolution, memory, cpu] = descriptionArr;
+function Product({ screen, resolution, memory, cpu, img, name, price }) {
   return (
     <div className={styles.wrapper}>
       <div className={styles.image}>

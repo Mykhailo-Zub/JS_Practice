@@ -12,7 +12,7 @@ function Product({ screen, resolution, memory, cpu, img, name, price }) {
         <div className={styles.description}>
           <div>
             <span>Screen size:</span>
-            <span>{screen}</span>
+            <span>{screen}"</span>
           </div>
           <div>
             <span>Screen resolution:</span>
@@ -20,7 +20,7 @@ function Product({ screen, resolution, memory, cpu, img, name, price }) {
           </div>
           <div>
             <span>Memory size:</span>
-            <span>{memory}</span>
+            <span>{memory} GB</span>
           </div>
           <div>
             <span>CPU:</span>

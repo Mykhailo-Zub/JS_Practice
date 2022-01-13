@@ -1,45 +1,49 @@
 import React, { useEffect, useState } from "react";
 import Slider from "@mui/material/Slider";
 import styles from "./Filters.module.css";
+import CustomTextInput from "../CustomTextInput/CustomTextInput";
+import CustomSelect from "../CustomSelect/CustomSelect";
+import CustomCheckbox from "../CustomCheckbox/CustomCheckbox";
 
-function Filters({ prices, memory, screen, searchParams, setSearchParams }) {
+function Filters({ minPrice, maxPrice, memory, screen, searchParams, saveSearchParams }) {
+  const { price: paramsPrice, text: paramsText, memory: paramsMemory, screen: paramsScreen } = searchParams;
   const [price, setPrice] = useState([0, 100]);
   const [minMaxPrice, setMinMaxPrice] = useState([0, 100]);
   const [text, setText] = useState(null);
   const [memoryFilter, setMemoryFilter] = useState("All");
-  const [screenFilter, setScreenFilter] = useState(new Array(screen.length).fill(false));
+  const [screenFilter, setScreenFilter] = useState({});
 
   useEffect(() => {
-    const min = prices?.[0] || 0;
-    const max = prices?.[prices.length - 1] || 100;
-    setMinMaxPrice([min, max]);
-    setPrice(searchParams.price || [min, max]);
-  }, [prices, searchParams]);
+    setMinMaxPrice([minPrice || 0, maxPrice || 100]);
+    setPrice(paramsPrice || [minPrice, maxPrice]);
+  }, [minPrice, maxPrice, paramsPrice]);
 
   useEffect(() => {
-    setText(searchParams.text);
-    setMemoryFilter(searchParams.memory || "All");
-  }, [searchParams]);
+    setMemoryFilter(paramsMemory || "All");
+  }, [paramsMemory]);
 
   useEffect(() => {
-    const values = [];
-    screen.forEach((el, i) => {
-      if (searchParams.screen) {
-        if (searchParams.screen.includes(el.toString())) {
-          values[i] = true;
+    setText(paramsText);
+  }, [paramsText]);
+
+  useEffect(() => {
+    const newScreenFilter = screen.reduce((acc, el, i) => {
+      if (paramsScreen) {
+        if (paramsScreen.includes(el.toString())) {
+          return { ...acc, [el]: true };
         } else {
-          values[i] = false;
+          return { ...acc, [el]: false };
         }
       } else {
-        values[i] = true;
+        return { ...acc, [el]: true };
       }
-    });
-    setScreenFilter(values);
-  }, [screen, searchParams]);
+    }, {});
+    setScreenFilter(newScreenFilter);
+  }, [screen, paramsScreen]);
 
-  const screenHandler = (i, value) => {
-    const newFilter = [...screenFilter];
-    newFilter[i] = value;
+  const screenHandler = (option, value) => {
+    const newFilter = { ...screenFilter };
+    newFilter[option] = value;
     setScreenFilter(newFilter);
   };
 
@@ -48,60 +52,57 @@ function Filters({ prices, memory, screen, searchParams, setSearchParams }) {
     if (price[0] !== minMaxPrice[0] || price[1] !== minMaxPrice[1]) params.price = `${price[0]}-${price[1]}`;
     if (text) params.text = text;
     if (memoryFilter !== "All") params.memory = memoryFilter;
-    if (screenFilter.some((el) => !el)) {
+    if (Object.values(screenFilter).some((el) => !el)) {
       const screenParams = [];
-      screenFilter.forEach((el, i) => {
-        if (el) {
-          screenParams.push(screen[i]);
-        }
-      });
+      for (let screen in screenFilter) {
+        if (screenFilter[screen]) screenParams.push(screen);
+      }
       params.screen = screenParams.join(" ");
     }
-    setSearchParams(params);
+    saveSearchParams(params);
   };
 
   return (
     <div className={styles.wrapper}>
       <div className={styles.header}>Filters</div>
       <div className={styles.textBlock}>
-        <label htmlFor="text">Search by name:</label>
-        <input name="text" type="search" value={text || ""} onChange={(e) => setText(e.target.value)} />
+        <CustomTextInput value={text || ""} changeFunction={(e) => setText(e.target.value)} label="Search by name:" />
       </div>
 
       <div className={styles.priceBlock}>
         <div className={styles.blockName}>Price:</div>
         <div className={styles.priceSlider}>
-          <label>
-            <Slider
-              getAriaLabel={() => "Price range"}
-              value={"" || price}
-              min={minMaxPrice[0]}
-              max={minMaxPrice[1]}
-              onChange={(e) => setPrice([...e.target.value])}
-              valueLabelDisplay="auto"
-              getAriaValueText={() => `${price} UAH`}
-            />
-          </label>
+          <Slider
+            getAriaLabel={() => "Price range"}
+            value={"" || price}
+            min={minMaxPrice[0]}
+            max={minMaxPrice[1]}
+            onChange={(e) => setPrice([...e.target.value])}
+            valueLabelDisplay="auto"
+            getAriaValueText={() => `${price} UAH`}
+          />
         </div>
       </div>
       <div className={styles.memoryBlock}>
-        <label htmlFor="memory">Memory:</label>
-        <select id="memory" value={memoryFilter} onChange={(e) => setMemoryFilter(e.target.value)}>
-          <option value={"All"}>All</option>
-          {memory?.map((el, i) => (
-            <option value={el} key={i}>
-              {el}
-            </option>
-          ))}
-        </select>
+        <CustomSelect
+          value={memoryFilter}
+          changeFunction={(e) => setMemoryFilter(e.target.value)}
+          label="Memory:"
+          optionsArr={memory}
+          defaultValue="All"
+          optionPostfix=" GB"
+        />
       </div>
       <div className={styles.screenBlock}>
         <div className={styles.screenBlockHeader}>Screen size:</div>
         {screen?.map((el, i) => (
-          <label key={i}>
-            <input type="checkbox" checked={screenFilter[i] || false} onChange={(e) => screenHandler(i, e.target.checked)} />
-            {el}
-          </label>
+          <CustomCheckbox
+            key={i}
+            value={screenFilter[el] || false}
+            changeFunction={(e) => screenHandler(el, e.target.checked)}
+            label={el}
+            labelPostfix='"'
+          />
         ))}
       </div>
       <button onClick={handleFilters}>Apply filters</button>

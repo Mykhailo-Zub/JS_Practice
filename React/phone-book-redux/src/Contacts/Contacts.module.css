@@ -1,0 +1,79 @@
+.wrapper {
+    background: url('../img/background.webp');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 100%;
+    height: 100vh;
+    overflow: auto;
+}
+
+.blur {
+    background-color: rgba(0, 0, 0, 0.63);
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: auto;
+    min-height: 100%;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+    border-bottom: 3px solid rgb(255, 255, 255);
+    position: relative;
+    font-weight: 800;
+    height: 20vw;
+    max-height: 150px;
+}
+
+.header img {
+    position: absolute;
+    width: 10vw;
+    max-width: 80px;
+}
+
+.header div {
+    margin: 0 auto;
+}
+
+.contacts {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 10px 20px;
+}
+
+.addBtn {
+    position: absolute;
+    margin-top: auto;
+    margin-bottom: 30px;
+    background: url('../img/add-contact.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    width: 20vw;
+    height: 20vw;
+    max-width: 200px;
+    max-height: 200px;
+    border-top-left-radius: 50%;
+    border-top-right-radius: 50%;
+    background-size: contain;
+    bottom: 30px;
+    right: 30px;
+    cursor: pointer;
+}
+
+@media screen and (max-width: 1024px) {
+    .addBtn {
+        bottom: 2vw;
+        right: 2vw;
+    }
+
+    .header {
+        border-bottom: 0.5vw solid rgb(255, 255, 255);
+    }
+}
+

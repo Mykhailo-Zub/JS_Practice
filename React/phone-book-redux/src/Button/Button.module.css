@@ -1,0 +1,21 @@
+.wrapper {
+    width: 90%;
+    height: 120px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    background: linear-gradient(0deg, rgba(3,214,174,1) 0%, rgba(8,188,190,1) 100%);
+    border-radius: 25px;
+    color: #fff;
+}
+
+.red {
+    background: linear-gradient(0deg, rgba(214,3,106,1) 0%, rgba(190,8,8,1) 100%);
+}
+
+@media screen and (max-width: 1024px) {
+    .wrapper {
+        height: 10vw;
+    }
+}

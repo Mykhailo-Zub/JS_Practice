@@ -1,0 +1,10 @@
+export const GET_ALL = "GET_ALL";
+export const EDIT_POPUP = "EDIT_POPUP";
+export const DELETE_POPUP = "DELETE_POPUP";
+export const FOCUS_CONTACT_ID = "FOCUS_CONTACT_ID";
+export const FIRST_NAME = "FIRST_NAME";
+export const FIRST_NAME_OK = "FIRST_NAME_OK";
+export const LAST_NAME = "LAST_NAME";
+export const LAST_NAME_OK = "LAST_NAME_OK";
+export const PHONE = "PHONE";
+export const PHONE_OK = "PHONE_OK";

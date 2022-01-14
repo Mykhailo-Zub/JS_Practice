@@ -72,8 +72,8 @@ function App() {
   const [validSearchParams, setValidSearchParams] = useState({});
 
   const [minPrice, maxPrice] = useMemo(() => {
-    const allPrices = products?.map((el) => parseInt(el.price)).sort((a, b) => a - b);
-    return [allPrices[0], allPrices[allPrices.length - 1]];
+    const allPrices = products?.map((el) => parseInt(el.price));
+    return [Math.min(...allPrices), Math.max(...allPrices)];
   }, []);
 
   const memory = useMemo(() => Array.from(new Set(products?.map((el) => el.memory))), []);
@@ -93,11 +93,7 @@ function App() {
       setValidSearchParams((prevSearchParams) => ({ ...prevSearchParams, price: undefined }));
     }
     const currentText = searchParams.get("text");
-    if (currentText) {
-      setValidSearchParams((prevSearchParams) => ({ ...prevSearchParams, text: currentText }));
-    } else {
-      setValidSearchParams((prevSearchParams) => ({ ...prevSearchParams, text: undefined }));
-    }
+    setValidSearchParams((prevSearchParams) => ({ ...prevSearchParams, text: currentText || undefined }));
     const currentMemory = parseInt(searchParams.get("memory"));
     if (memory && memory.find((el) => el === currentMemory)) {
       setValidSearchParams((prevSearchParams) => ({ ...prevSearchParams, memory: currentMemory }));
@@ -118,41 +114,41 @@ function App() {
     }
   }, [searchParams, memory, screen]);
 
-  const saveSearchParams = useCallback(
-    (params) => {
-      setSearchParams(params);
-    },
-    [setSearchParams]
-  );
+  const saveSearchParams = useCallback(() => {
+    const params = {};
+    const { price: [from, to] = [], text, memory, screen } = validSearchParams;
+    if (from && (from !== minPrice || to !== maxPrice)) params.price = `${from}-${to}`;
+    if (text) params.text = text;
+    if (memory && memory !== "All") params.memory = memory;
+    if (screen) params.screen = screen;
+    setSearchParams(params);
+  }, [validSearchParams, minPrice, maxPrice, setSearchParams]);
 
   const filteredProducts = products?.filter((el) => {
-    const { price: minMaxPrice = [], text, memory: memoryFilter, screen: screenFilter } = validSearchParams;
+    const { price: [minPrice, maxPrice] = [], text, memory: memoryFilter, screen: screenFilter } = validSearchParams;
     const { price, screen, memory, name } = el;
-    const intPrice = parseInt(price);
     let newElement = true;
-    if (minMaxPrice.length > 0) {
-      if (intPrice >= minMaxPrice[0] && intPrice <= minMaxPrice[1]) {
-        newElement = el;
-      } else newElement = undefined;
+    if (minPrice && maxPrice) {
+      if (price >= minPrice && price <= maxPrice) {
+        newElement = true;
+      } else newElement = false;
     }
     if (newElement && text) {
       if (name.toLowerCase().includes(text.toLowerCase())) {
-        newElement = el;
-      } else newElement = undefined;
+        newElement = true;
+      } else newElement = false;
     }
     if (newElement && memoryFilter) {
       if (memoryFilter === memory) {
-        newElement = el;
-      } else newElement = undefined;
+        newElement = true;
+      } else newElement = false;
     }
     if (newElement && screenFilter) {
       if (screenFilter.includes(screen)) {
-        newElement = el;
-      } else newElement = undefined;
+        newElement = true;
+      } else newElement = false;
     }
-    if (newElement) {
-      return el;
-    }
+    return newElement;
   });
 
   return (
@@ -174,6 +170,7 @@ function App() {
           memory={memory}
           screen={screen}
           searchParams={validSearchParams}
+          setSearchParams={setValidSearchParams}
           saveSearchParams={saveSearchParams}
         />
       </div>

@@ -4,7 +4,7 @@ function CustomSelect({ value, changeFunction, label, optionsArr, defaultValue, 
   return (
     <>
       <label htmlFor={label}>{label}</label>
-      <select id={label} value={value} onChange={changeFunction}>
+      <select id={label} value={value} onChange={(e) => changeFunction("memory", e.target.value)}>
         <option value={defaultValue}>{defaultValue}</option>
         {optionsArr?.map((el, i) => (
           <option value={el} key={i}>

@@ -84,11 +84,7 @@ function App() {
     const currentPriceArr = searchParams.get("price")?.split("-");
     if (currentPriceArr && currentPriceArr.length === 2 && currentPriceArr.every((el) => !el.match(/\D/gm))) {
       const [min, max] = currentPriceArr.map((el) => parseInt(el));
-      if (min <= max) {
-        setValidSearchParams((prevSearchParams) => ({ ...prevSearchParams, price: [min, max] }));
-      } else {
-        setValidSearchParams((prevSearchParams) => ({ ...prevSearchParams, price: undefined }));
-      }
+      setValidSearchParams((prevSearchParams) => ({ ...prevSearchParams, price: min <= max ? [min, max] : undefined }));
     } else {
       setValidSearchParams((prevSearchParams) => ({ ...prevSearchParams, price: undefined }));
     }
@@ -116,11 +112,11 @@ function App() {
 
   const saveSearchParams = useCallback(() => {
     const params = {};
-    const { price: [from, to] = [], text, memory, screen } = validSearchParams;
+    const { price: [from, to] = [], text, memory, screen: paramsScreen } = validSearchParams;
     if (from && (from !== minPrice || to !== maxPrice)) params.price = `${from}-${to}`;
     if (text) params.text = text;
     if (memory && memory !== "All") params.memory = memory;
-    if (screen) params.screen = screen;
+    if (paramsScreen && screen.join(" ") !== paramsScreen) params.screen = paramsScreen;
     setSearchParams(params);
   }, [validSearchParams, minPrice, maxPrice, setSearchParams]);
 

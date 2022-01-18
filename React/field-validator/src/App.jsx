@@ -2,6 +2,7 @@ import { useState } from "react";
 import styles from "./App.module.css";
 import CustomInput from "./components/CustomInput/CustomInput";
 import CustomSelect from "./components/CustomSelect/CustomSelect";
+import FieldValidator from "./components/FieldValidator/FieldValidator";
 
 const inputsVariant = "outlined";
 
@@ -36,14 +37,16 @@ function App() {
   return (
     <div className={styles.wrapper}>
       <h2>Submit form</h2>
-      <CustomInput
+      <FieldValidator
+        component={<CustomInput />}
         value={firstName || ""}
         onChange={(text) => setFirstName(text)}
         validators={[checkNameLength, nameValidation]}
         label="First name"
         variant={inputsVariant}
       />
-      <CustomInput
+      <FieldValidator
+        component={<CustomInput />}
         value={age || ""}
         onChange={(number) => setAge(number)}
         validators={[checkAge, check18]}
@@ -51,7 +54,8 @@ function App() {
         variant={inputsVariant}
         type="Number"
       />
-      <CustomSelect
+      <FieldValidator
+        component={<CustomSelect />}
         value={lang || []}
         onChange={(arr) => setLang(arr)}
         validators={[checkLang]}
@@ -60,7 +64,8 @@ function App() {
         options={languages}
         multiple={true}
       />
-      <CustomSelect
+      <FieldValidator
+        component={<CustomSelect />}
         value={exp || ""}
         onChange={(text) => setExp(text)}
         validators={[checkExp]}

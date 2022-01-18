@@ -7,7 +7,6 @@ import Select from "@mui/material/Select";
 import Chip from "@mui/material/Chip";
 import FormControl from "@mui/material/FormControl";
 import FormHelperText from "@mui/material/FormHelperText";
-import fieldValidator from "../../HOC/FieldValidator/FieldValidator";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -53,4 +52,4 @@ function CustomSelect({ value, onChange, invalid, errorText, label, multiple, op
   );
 }
 
-export default fieldValidator(CustomSelect);
+export default CustomSelect;

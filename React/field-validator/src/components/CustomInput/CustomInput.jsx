@@ -1,5 +1,4 @@
 import React from "react";
-import fieldValidator from "../../HOC/FieldValidator/FieldValidator";
 import TextField from "@mui/material/TextField";
 
 function CustomInput({ value, onChange, invalid, errorText, label, variant, type }) {
@@ -17,4 +16,4 @@ function CustomInput({ value, onChange, invalid, errorText, label, variant, type
   );
 }
 
-export default fieldValidator(CustomInput);
+export default CustomInput;

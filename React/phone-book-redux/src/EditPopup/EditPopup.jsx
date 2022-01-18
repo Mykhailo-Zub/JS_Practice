@@ -1,15 +1,31 @@
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect, useMemo } from "react";
 import ReactDOM from "react-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { setFirstNameForm, setFirstNameOk, setLastNameForm, setLastNameOk, setPhoneForm, setPhoneOk } from "../redux/editPopupComponentAction";
+import {
+  setFirstNameForm,
+  setFirstNameOk,
+  setLastNameForm,
+  setLastNameOk,
+  setPhoneForm,
+  setPhoneOk,
+  setIsEditPopup,
+} from "../redux/editPopupComponentAction";
 import Button from "../Button/Button";
 import styles from "./EditPopup.module.css";
+import { saveContactInfo, setFocusContactId } from "../redux/contactsAction";
 
 const popUpParent = document.body;
 
-function EditPopup({ contact, confirmHandler, closeHandler }) {
-  const { firstName = null, lastName = null, phone = null, id } = contact || {};
+function EditPopup() {
   const dispatch = useDispatch();
+
+  const { contacts, focusContactId } = useSelector((store) => store.contactsReducer);
+
+  const contact = useMemo(() => {
+    return contacts.find((el) => el.id === focusContactId);
+  }, [contacts, focusContactId]);
+
+  const { firstName = null, lastName = null, phone = null, id } = contact || {};
 
   useEffect(() => {
     dispatch(setFirstNameForm(firstName));
@@ -36,7 +52,6 @@ function EditPopup({ contact, confirmHandler, closeHandler }) {
     dispatch(setPhoneOk(checkResult));
     return checkResult;
   };
-
   const nameHandler = (e) => {
     const firstName = e.target.value;
     checkFirstName(firstName);
@@ -55,6 +70,10 @@ function EditPopup({ contact, confirmHandler, closeHandler }) {
     dispatch(setPhoneForm(phone));
   };
 
+  const closeHandler = useCallback(() => {
+    dispatch(setIsEditPopup(false));
+  }, [dispatch]);
+
   const checkAllFields = (firstName, lastName, phone) => {
     const firstNameField = checkFirstName(firstName);
     const lastNameField = checkLastName(lastName);
@@ -62,12 +81,14 @@ function EditPopup({ contact, confirmHandler, closeHandler }) {
     return firstNameField && lastNameField && phoneField;
   };
 
-  const saveContact = () => {
+  const saveContact = useCallback(() => {
     if (checkAllFields(firstNameForm, lastNameForm, phoneForm)) {
       const contact = { firstName: firstNameForm, lastName: lastNameForm, phone: "+" + phoneForm };
-      confirmHandler(contact);
+      dispatch(saveContactInfo(contact, focusContactId));
+      dispatch(setFocusContactId(null));
+      closeHandler();
     }
-  };
+  }, [firstNameForm, lastNameForm, phoneForm, focusContactId, dispatch]);
 
   return ReactDOM.createPortal(
     <div className={styles.wrapper}>

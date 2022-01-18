@@ -1,43 +1,30 @@
-import { FIRST_NAME, FIRST_NAME_OK, LAST_NAME, LAST_NAME_OK, PHONE, PHONE_OK } from "./types";
+import mainAction from "./mainAction";
+import { FIRST_NAME, FIRST_NAME_OK, LAST_NAME, LAST_NAME_OK, PHONE, PHONE_OK, EDIT_POPUP } from "./types";
+
+export const setIsEditPopup = (isPopup) => {
+  return mainAction(EDIT_POPUP, isPopup);
+};
 
 export const setFirstNameForm = (text) => {
-  return {
-    type: FIRST_NAME,
-    payload: text,
-  };
+  return mainAction(FIRST_NAME, text);
 };
 
 export const setFirstNameOk = (isOk) => {
-  return {
-    type: FIRST_NAME_OK,
-    payload: isOk,
-  };
+  return mainAction(FIRST_NAME_OK, isOk);
 };
 
 export const setLastNameForm = (text) => {
-  return {
-    type: LAST_NAME,
-    payload: text,
-  };
+  return mainAction(LAST_NAME, text);
 };
 
 export const setLastNameOk = (isOk) => {
-  return {
-    type: LAST_NAME_OK,
-    payload: isOk,
-  };
+  return mainAction(LAST_NAME_OK, isOk);
 };
 
 export const setPhoneForm = (number) => {
-  return {
-    type: PHONE,
-    payload: number,
-  };
+  return mainAction(PHONE, number);
 };
 
 export const setPhoneOk = (isOk) => {
-  return {
-    type: PHONE_OK,
-    payload: isOk,
-  };
+  return mainAction(PHONE_OK, isOk);
 };

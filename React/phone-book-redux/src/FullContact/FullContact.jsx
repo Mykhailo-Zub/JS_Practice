@@ -1,15 +1,36 @@
-import React from "react";
+import React, { useMemo, useCallback } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { setIsDeletePopup } from "../redux/deletePopupHandlerAction";
+import { setFocusContactId } from "../redux/contactsAction";
 import Button from "../Button/Button";
 import styles from "./FullContact.module.css";
 import contactImg from "../img/contact-photo.png";
 import backImg from "../img/back.png";
+import { setIsEditPopup } from "../redux/editPopupComponentAction";
 
-function FullContact({ contact, editContact, deleteContact, goBack }) {
-  const { firstName, lastName, phone } = contact;
+function FullContact() {
+  const dispatch = useDispatch();
+
+  const { contacts, focusContactId } = useSelector((store) => store.contactsReducer);
+
+  const contact = useMemo(() => {
+    return contacts.find((el) => el.id === focusContactId);
+  }, [contacts, focusContactId]);
+
+  const { firstName = null, lastName = null, phone = null } = contact || {};
+
+  const editContact = useCallback(() => {
+    dispatch(setIsEditPopup(true));
+  }, [dispatch]);
+
+  const deleteContact = useCallback(() => {
+    dispatch(setIsDeletePopup(true));
+  }, [dispatch]);
+
   return (
     <div className={styles.wrapper}>
       <div className={styles.blur}>
-        <div className={styles.back} onClick={goBack}>
+        <div className={styles.back} onClick={() => dispatch(setFocusContactId(null))}>
           <div className={styles.arrow}>
             <img src={backImg} alt="back" />
           </div>

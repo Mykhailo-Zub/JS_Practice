@@ -1,10 +1,14 @@
 import React from "react";
+import { useDispatch } from "react-redux";
 import styles from "./Contact.module.css";
 import contactImg from "../img/contact-photo.png";
+import { setFocusContactId } from "../redux/contactsAction";
 
-function Contact({ firstName, lastName, phone, id, clickHandler }) {
+function Contact({ firstName, lastName, phone, id }) {
+  const dispatch = useDispatch();
+
   return (
-    <div className={styles.wrapper} onClick={() => clickHandler(id)}>
+    <div className={styles.wrapper} onClick={() => dispatch(setFocusContactId(id))}>
       <img src={contactImg} alt="Contact" />
       <div className={styles.info}>
         <div className={styles.nameWrapper}>

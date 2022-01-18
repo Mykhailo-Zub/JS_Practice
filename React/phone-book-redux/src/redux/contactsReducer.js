@@ -1,9 +1,22 @@
-import { GET_ALL } from "./types";
+import { GET_ALL, FOCUS_CONTACT_ID } from "./types";
 
-export const contactsReducer = (state = [], action) => {
+const initialState = {
+  contacts: [],
+  focusContactId: null,
+};
+
+export const contactsReducer = (state = [initialState], action) => {
   switch (action.type) {
     case GET_ALL:
-      return action.payload;
+      return {
+        ...state,
+        contacts: action.payload,
+      };
+    case FOCUS_CONTACT_ID:
+      return {
+        ...state,
+        focusContactId: action.payload,
+      };
     default:
       return state;
   }

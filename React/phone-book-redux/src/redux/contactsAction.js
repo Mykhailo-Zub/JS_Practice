@@ -1,13 +1,17 @@
-import { getAllContacts } from "../requests";
-import { GET_ALL } from "./types";
+import { deleteSelectedContact, getAllContacts, saveContact } from "../requests";
+import mainAction from "./mainAction";
+import { GET_ALL, FOCUS_CONTACT_ID } from "./types";
 
 const getAll = (contacts) => {
-  return {
-    type: GET_ALL,
-    payload: contacts,
-  };
+  return mainAction(GET_ALL, contacts);
 };
 
-const getContactsToStore = () => (dispatch) => getAllContacts().then((data) => dispatch(getAll(data)));
+export const setFocusContactId = (id) => {
+  return mainAction(FOCUS_CONTACT_ID, id);
+};
 
-export default getContactsToStore;
+export const getContactsToStore = () => (dispatch) => getAllContacts().then((data) => dispatch(getAll(data)));
+
+export const saveContactInfo = (contact, id) => (dispatch) => saveContact(contact, id).then(() => dispatch(getContactsToStore()));
+
+export const deleteContact = (id) => (dispatch) => deleteSelectedContact(id).then(() => dispatch(getContactsToStore()));

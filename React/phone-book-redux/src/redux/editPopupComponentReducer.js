@@ -1,6 +1,7 @@
-import { FIRST_NAME, FIRST_NAME_OK, LAST_NAME, LAST_NAME_OK, PHONE, PHONE_OK } from "./types";
+import { FIRST_NAME, FIRST_NAME_OK, LAST_NAME, LAST_NAME_OK, PHONE, PHONE_OK, EDIT_POPUP } from "./types";
 
 const initialState = {
+  isEditPopup: false,
   firstNameForm: null,
   firstNameOk: true,
   lastNameForm: null,
@@ -11,6 +12,11 @@ const initialState = {
 
 export const editPopupComponentReducer = (state = initialState, action) => {
   switch (action.type) {
+    case EDIT_POPUP:
+      return {
+        ...state,
+        isEditPopup: action.payload,
+      };
     case FIRST_NAME:
       return {
         ...state,

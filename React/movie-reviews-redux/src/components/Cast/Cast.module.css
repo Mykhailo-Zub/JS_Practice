@@ -1,0 +1,9 @@
+.characters {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.characters > div {
+    margin: 40px;
+}

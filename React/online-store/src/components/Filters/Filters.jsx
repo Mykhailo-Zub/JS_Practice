@@ -1,39 +1,18 @@
-import React, { useEffect, useState } from "react";
-import Slider from "@mui/material/Slider";
+import React from "react";
 import styles from "./Filters.module.css";
 import CustomTextInput from "../CustomTextInput/CustomTextInput";
 import CustomSelect from "../CustomSelect/CustomSelect";
 import CustomCheckbox from "../CustomCheckbox/CustomCheckbox";
+import CustomSlider from "../CustomSlider/CustomSlider";
 
 function Filters({ minPrice, maxPrice, memory, screen, searchParams, setSearchParams, saveSearchParams }) {
-  const { price: paramsPrice, text: paramsText, memory: paramsMemory, screen: paramsScreen } = searchParams;
-  const [screenFilter, setScreenFilter] = useState({});
-
-  useEffect(() => {
-    const newScreenFilter = screen.reduce((acc, el, i) => {
-      if (paramsScreen) {
-        if (paramsScreen.includes(el.toString())) {
-          return { ...acc, [el]: true };
-        } else {
-          return { ...acc, [el]: false };
-        }
-      } else {
-        return { ...acc, [el]: true };
-      }
-    }, {});
-    setScreenFilter(newScreenFilter);
-  }, [screen, paramsScreen]);
+  const { price: paramsPrice, text: paramsText, memory: paramsMemory, screen: paramsScreen = {} } = searchParams;
 
   const screenHandler = (option, value) => {
-    const newFilter = { ...screenFilter };
+    const newFilter = { ...paramsScreen };
     newFilter[option] = value;
-    setScreenFilter(newFilter);
     const params = { ...searchParams };
-    const selectedScreen = [];
-    for (let el in newFilter) {
-      if (newFilter[el]) selectedScreen.push(el);
-    }
-    params.screen = selectedScreen.join(" ");
+    params.screen = newFilter;
     setSearchParams(params);
   };
 
@@ -65,15 +44,7 @@ function Filters({ minPrice, maxPrice, memory, screen, searchParams, setSearchPa
       <div className={styles.priceBlock}>
         <div className={styles.blockName}>Price:</div>
         <div className={styles.priceSlider}>
-          <Slider
-            getAriaLabel={() => "Price range"}
-            value={paramsPrice || [minPrice, maxPrice]}
-            min={minPrice}
-            max={maxPrice}
-            onChange={(e) => handleSearchParams("price", [...e.target.value])}
-            valueLabelDisplay="auto"
-            getAriaValueText={() => `${paramsPrice} UAH`}
-          />
+          <CustomSlider label="Price range" value={paramsPrice} minValue={minPrice} maxValue={maxPrice} changeFunction={handleSearchParams} />
         </div>
       </div>
       <div className={styles.memoryBlock}>
@@ -89,7 +60,7 @@ function Filters({ minPrice, maxPrice, memory, screen, searchParams, setSearchPa
       <div className={styles.screenBlock}>
         <div className={styles.screenBlockHeader}>Screen size:</div>
         {screen?.map((el, i) => (
-          <CustomCheckbox key={i} value={screenFilter[el] || false} changeFunction={screenHandler} label={el} labelPostfix='"' />
+          <CustomCheckbox key={i} value={paramsScreen[el] || false} changeFunction={screenHandler} label={el} labelPostfix='"' />
         ))}
       </div>
       <button onClick={saveSearchParams}>Save filters</button>

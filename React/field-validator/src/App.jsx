@@ -38,40 +38,26 @@ function App() {
     <div className={styles.wrapper}>
       <h2>Submit form</h2>
       <FieldValidator
-        component={<CustomInput />}
+        component={(props) => <CustomInput {...props} onChange={setFirstName} label="First name" variant={inputsVariant} />}
         value={firstName || ""}
-        onChange={(text) => setFirstName(text)}
         validators={[checkNameLength, nameValidation]}
-        label="First name"
-        variant={inputsVariant}
       />
       <FieldValidator
-        component={<CustomInput />}
+        component={(props) => <CustomInput {...props} onChange={setAge} label="Age" variant={inputsVariant} type="Number" />}
         value={age || ""}
-        onChange={(number) => setAge(number)}
         validators={[checkAge, check18]}
-        label="Age"
-        variant={inputsVariant}
-        type="Number"
       />
       <FieldValidator
-        component={<CustomSelect />}
+        component={(props) => (
+          <CustomSelect {...props} onChange={setLang} label="Technoligies" variant={inputsVariant} options={languages} multiple={true} />
+        )}
         value={lang || []}
-        onChange={(arr) => setLang(arr)}
         validators={[checkLang]}
-        label="Technoligies"
-        variant={inputsVariant}
-        options={languages}
-        multiple={true}
       />
       <FieldValidator
-        component={<CustomSelect />}
+        component={(props) => <CustomSelect {...props} onChange={setExp} label="Years of experience" variant={inputsVariant} options={years} />}
         value={exp || ""}
-        onChange={(text) => setExp(text)}
         validators={[checkExp]}
-        label="Years of experience"
-        variant={inputsVariant}
-        options={years}
       />
     </div>
   );

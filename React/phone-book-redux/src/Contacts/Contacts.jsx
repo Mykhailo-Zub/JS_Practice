@@ -1,15 +1,12 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { connect } from "react-redux";
 import Contact from "../Contact/Contact";
 import Button from "../Button/Button";
 import styles from "./Contacts.module.css";
 import contactsImg from "../img/contact-list.png";
 import { setIsEditPopup } from "../redux/editPopupComponentAction";
 
-function Contacts() {
-  const dispatch = useDispatch();
-  const { contacts } = useSelector((store) => store.contactsReducer);
-
+function Contacts({ contacts, setIsEditPopup }) {
   return (
     <div className={styles.wrapper}>
       <div className={styles.blur}>
@@ -23,10 +20,22 @@ function Contacts() {
             return <Contact firstName={firstName} lastName={lastName} phone={phone} id={id} key={id} />;
           })}
         </div>
-        <Button additionalClass={styles.addBtn} clickHandler={() => dispatch(setIsEditPopup(true))} />
+        <Button additionalClass={styles.addBtn} clickHandler={setIsEditPopup} />
       </div>
     </div>
   );
 }
 
-export default Contacts;
+const mapStateToProps = (state) => {
+  return {
+    contacts: state.contactsReducer.contacts,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setIsEditPopup: () => dispatch(setIsEditPopup(true)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Contacts);

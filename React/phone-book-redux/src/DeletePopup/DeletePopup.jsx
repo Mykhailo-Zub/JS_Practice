@@ -1,34 +1,14 @@
-import React, { useCallback, useMemo } from "react";
+import React from "react";
 import ReactDOM from "react-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { connect } from "react-redux";
 import Button from "../Button/Button";
 import styles from "./DeletePopup.module.css";
-import { deleteContact, setFocusContactId } from "../redux/contactsAction";
+import { deleteContact } from "../redux/contactsAction";
 import { setIsDeletePopup } from "../redux/deletePopupHandlerAction";
 
 const popUpParent = document.body;
 
-function DeletePopup() {
-  const dispatch = useDispatch();
-
-  const { contacts, focusContactId } = useSelector((store) => store.contactsReducer);
-
-  const contact = useMemo(() => {
-    return contacts.find((el) => el.id === focusContactId);
-  }, [contacts, focusContactId]);
-
-  const { firstName, lastName } = contact || {};
-
-  const popupCloseHandler = useCallback(() => {
-    dispatch(setIsDeletePopup(false));
-  }, [dispatch]);
-
-  const deleteConfirmHandler = useCallback(() => {
-    dispatch(deleteContact(focusContactId));
-    dispatch(setFocusContactId(null));
-    popupCloseHandler();
-  }, [dispatch, popupCloseHandler, focusContactId]);
-
+function DeletePopup({ firstName, lastName, setIsDeletePopup, deleteContact }) {
   return ReactDOM.createPortal(
     <div className={styles.wrapper}>
       <div className={styles.heading}>
@@ -39,12 +19,28 @@ function DeletePopup() {
         ?
       </div>
       <div className={styles.buttons}>
-        <Button clickHandler={deleteConfirmHandler} isRed={true} text="Yes, delete" />
-        <Button clickHandler={popupCloseHandler} text="No, go back" />
+        <Button clickHandler={deleteContact} isRed={true} text="Yes, delete" />
+        <Button clickHandler={setIsDeletePopup} text="No, go back" />
       </div>
     </div>,
     popUpParent
   );
 }
 
-export default DeletePopup;
+const mapStateToProps = (state) => {
+  const focusContactId = state.contactsReducer.focusContactId;
+  const { firstName, lastName } = state.contactsReducer.contacts.find((el) => el.id === focusContactId) || {};
+  return {
+    firstName,
+    lastName,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setIsDeletePopup: () => dispatch(setIsDeletePopup(false)),
+    deleteContact: () => dispatch(deleteContact()),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(DeletePopup);

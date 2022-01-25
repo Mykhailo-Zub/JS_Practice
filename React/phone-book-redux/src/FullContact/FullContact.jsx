@@ -1,5 +1,5 @@
-import React, { useMemo, useCallback } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React from "react";
+import { connect } from "react-redux";
 import { setIsDeletePopup } from "../redux/deletePopupHandlerAction";
 import { setFocusContactId } from "../redux/contactsAction";
 import Button from "../Button/Button";
@@ -8,29 +8,11 @@ import contactImg from "../img/contact-photo.png";
 import backImg from "../img/back.png";
 import { setIsEditPopup } from "../redux/editPopupComponentAction";
 
-function FullContact() {
-  const dispatch = useDispatch();
-
-  const { contacts, focusContactId } = useSelector((store) => store.contactsReducer);
-
-  const contact = useMemo(() => {
-    return contacts.find((el) => el.id === focusContactId);
-  }, [contacts, focusContactId]);
-
-  const { firstName = null, lastName = null, phone = null } = contact || {};
-
-  const editContact = useCallback(() => {
-    dispatch(setIsEditPopup(true));
-  }, [dispatch]);
-
-  const deleteContact = useCallback(() => {
-    dispatch(setIsDeletePopup(true));
-  }, [dispatch]);
-
+function FullContact({ firstName, lastName, phone, setIsEditPopup, setIsDeletePopup, setFocusContactId }) {
   return (
     <div className={styles.wrapper}>
       <div className={styles.blur}>
-        <div className={styles.back} onClick={() => dispatch(setFocusContactId(null))}>
+        <div className={styles.back} onClick={() => setFocusContactId(null)}>
           <div className={styles.arrow}>
             <img src={backImg} alt="back" />
           </div>
@@ -44,12 +26,31 @@ function FullContact() {
         <div className={styles.phone}>{phone}</div>
         <div className={styles.phoneType}>Mobile</div>
         <div className={styles.buttons}>
-          <Button text="Edit contact" clickHandler={editContact} />
-          <Button clickHandler={deleteContact} text="Delete contact" isRed={true} />
+          <Button text="Edit contact" clickHandler={setIsEditPopup} />
+          <Button clickHandler={setIsDeletePopup} text="Delete contact" isRed={true} />
         </div>
       </div>
     </div>
   );
 }
 
-export default FullContact;
+const mapStateToProps = (state) => {
+  const focusContactId = state.contactsReducer.focusContactId;
+  const { firstName, lastName, phone } = state.contactsReducer.contacts.find((el) => el.id === focusContactId) || {};
+  return {
+    firstName,
+    lastName,
+    phone,
+    focusContactId,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setIsDeletePopup: () => dispatch(setIsDeletePopup(true)),
+    setIsEditPopup: () => dispatch(setIsEditPopup(true)),
+    setFocusContactId: () => dispatch(setFocusContactId(null)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(FullContact);

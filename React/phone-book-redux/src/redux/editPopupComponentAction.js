@@ -5,7 +5,7 @@ export const setIsEditPopup = (isPopup) => {
   return mainAction(EDIT_POPUP, isPopup);
 };
 
-export const setFirstNameForm = (text) => {
+const setFirstName = (text) => {
   return mainAction(FIRST_NAME, text);
 };
 
@@ -13,7 +13,7 @@ export const setFirstNameOk = (isOk) => {
   return mainAction(FIRST_NAME_OK, isOk);
 };
 
-export const setLastNameForm = (text) => {
+const setLastName = (text) => {
   return mainAction(LAST_NAME, text);
 };
 
@@ -21,10 +21,28 @@ export const setLastNameOk = (isOk) => {
   return mainAction(LAST_NAME_OK, isOk);
 };
 
-export const setPhoneForm = (number) => {
+const setPhone = (number) => {
   return mainAction(PHONE, number);
 };
 
 export const setPhoneOk = (isOk) => {
   return mainAction(PHONE_OK, isOk);
+};
+
+export const setFirstNameForm = (text) => (dispatch) => {
+  const checkResult = Boolean(text && text.length < 10);
+  dispatch(setFirstName(text));
+  dispatch(setFirstNameOk(checkResult));
+};
+
+export const setLastNameForm = (text) => (dispatch) => {
+  const checkResult = Boolean(text && text.length < 20);
+  dispatch(setLastName(text));
+  dispatch(setLastNameOk(checkResult));
+};
+
+export const setPhoneForm = (number) => (dispatch) => {
+  const checkResult = Boolean(number && number.length === 12);
+  dispatch(setPhone(number));
+  dispatch(setPhoneOk(checkResult));
 };

@@ -3,23 +3,13 @@ import Contacts from "./Contacts/Contacts";
 import EditPopup from "./EditPopup/EditPopup";
 import DeletePopup from "./DeletePopup/DeletePopup";
 import FullContact from "./FullContact/FullContact";
-import { useDispatch, useSelector } from "react-redux";
+import { connect } from "react-redux";
 import { getContactsToStore } from "./redux/contactsAction";
 
-function App() {
-  const dispatch = useDispatch();
-
-  const { focusContactId } = useSelector((store) => store.contactsReducer);
-  const { isDeletePopup } = useSelector((store) => store.deletePopupHandlerReducer);
-  const { isEditPopup } = useSelector((store) => store.editPopupComponentReducer);
-
-  const getAndSetContacts = () => {
-    dispatch(getContactsToStore());
-  };
-
+function App({ focusContactId, isDeletePopup, isEditPopup, getAndSetContacts }) {
   useEffect(() => {
     getAndSetContacts();
-  }, []);
+  }, [getAndSetContacts]);
 
   return (
     <>
@@ -30,4 +20,18 @@ function App() {
   );
 }
 
-export default App;
+const mapStateToProps = (state) => {
+  return {
+    focusContactId: state.contactsReducer.focusContactId,
+    isDeletePopup: state.deletePopupHandlerReducer.isDeletePopup,
+    isEditPopup: state.editPopupComponentReducer.isEditPopup,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    getAndSetContacts: () => dispatch(getContactsToStore()),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

@@ -9,7 +9,7 @@ function CustomSlider({ value, minValue, maxValue, changeFunction, label }) {
         value={value || [minValue, maxValue]}
         min={minValue}
         max={maxValue}
-        onChange={(e) => changeFunction("price", [...e.target.value])}
+        onChange={(e) => changeFunction(label, [...e.target.value])}
         valueLabelDisplay="auto"
         getAriaValueText={() => `${value} UAH`}
       />

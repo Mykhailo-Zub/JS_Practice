@@ -9,23 +9,26 @@ function Filters({ minPrice, maxPrice, memory, screen, searchParams, setSearchPa
   const { price: paramsPrice, text: paramsText, memory: paramsMemory, screen: paramsScreen = {} } = searchParams;
 
   const screenHandler = (option, value) => {
-    const newFilter = { ...paramsScreen };
-    newFilter[option] = value;
+    /*  на счет замечания "к тому же, значения ты можешь хранить
+    в формате массива выбранных размеров, чтобы избежать хранения
+    общего: всех значений и выбранных среди них"
+      --мне же в любом случае нужен массив всех значений, чтобы построить список чекбоксов */
     const params = { ...searchParams };
-    params.screen = newFilter;
+    params.screen = { ...paramsScreen };
+    params.screen[option] = value;
     setSearchParams(params);
   };
 
   const handleSearchParams = (parameter, value) => {
     const params = { ...searchParams };
     switch (parameter) {
-      case "text":
+      case "Search by name:":
         params.text = value;
         break;
-      case "price":
+      case "Price range":
         params.price = value;
         break;
-      case "memory":
+      case "Memory:":
         params.memory = value !== "All" ? parseInt(value) : "";
         break;
       default:

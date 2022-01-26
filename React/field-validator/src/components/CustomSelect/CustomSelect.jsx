@@ -19,14 +19,14 @@ const MenuProps = {
   },
 };
 
-function CustomSelect({ value, onChange, invalid, errorText, label, multiple, options }) {
+function CustomSelect({ value, onChange, errorText, label, multiple, options }) {
   const handleChange = (event) => {
     const value = event.target.value;
     onChange(typeof value === "string" ? value.split(",") : value);
   };
 
   return (
-    <FormControl error={invalid} sx={{ m: 1, width: 300 }}>
+    <FormControl error={!!errorText} sx={{ m: 1, width: 300 }}>
       <InputLabel id={`custom-select-${label}`}>{label}</InputLabel>
       <Select
         labelId={`custom-select-${label}`}

@@ -1,6 +1,6 @@
 import React from "react";
 import { Outlet, useNavigate } from "react-router";
-import { getCast, getOne, getReviews } from "../../redux/moviesAction";
+import { clearMovieData } from "../../redux/moviesAction";
 import styles from "./RoutesWrapper.module.css";
 import { useDispatch } from "react-redux";
 
@@ -10,9 +10,7 @@ function RoutesWrapper() {
 
   const backHandler = () => {
     navigate(-1);
-    dispatch(getOne(null));
-    dispatch(getCast(null));
-    dispatch(getReviews(null));
+    dispatch(clearMovieData());
   };
 
   return (

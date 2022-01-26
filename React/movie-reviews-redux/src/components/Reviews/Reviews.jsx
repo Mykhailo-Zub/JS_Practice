@@ -7,12 +7,12 @@ import { useDispatch, useSelector } from "react-redux";
 
 function Reviews() {
   const dispatch = useDispatch();
-  const { reviews } = useSelector((state) => state.moviesReducer);
+  const reviews = useSelector((state) => state.moviesReducer.reviews);
   const { id } = useParams();
 
   useEffect(() => {
     dispatch(getMovieReviews(id));
-  }, [dispatch, id]);
+  }, [id]);
 
   return (
     <div className={styles.wrapper}>

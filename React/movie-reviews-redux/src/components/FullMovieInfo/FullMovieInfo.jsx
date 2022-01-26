@@ -7,13 +7,13 @@ import { useDispatch, useSelector } from "react-redux";
 
 function FullMovieInfo() {
   const dispatch = useDispatch();
-  const { movie } = useSelector((state) => state.moviesReducer);
+  const movie = useSelector((state) => state.moviesReducer.movie || {});
 
   const { id } = useParams();
 
   useEffect(() => {
     dispatch(getMovieInfo(id));
-  }, [dispatch, id]);
+  }, [id]);
 
   const {
     title,
@@ -28,7 +28,7 @@ function FullMovieInfo() {
     runtime,
     homepage,
     overview,
-  } = movie || {};
+  } = movie;
 
   const connectText = (array) => array?.map((el) => el.name).join(", ");
 

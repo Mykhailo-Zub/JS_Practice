@@ -9,11 +9,11 @@ function Cast() {
   const dispatch = useDispatch();
   const { id } = useParams();
 
-  const { cast } = useSelector((state) => state.moviesReducer);
+  const cast = useSelector((state) => state.moviesReducer.cast);
 
   useEffect(() => {
     dispatch(getMovieCast(id));
-  }, [dispatch, id]);
+  }, [id]);
 
   return (
     <>

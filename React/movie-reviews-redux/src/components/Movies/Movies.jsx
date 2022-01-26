@@ -7,11 +7,11 @@ import { useDispatch, useSelector } from "react-redux";
 
 function Movies() {
   const dispatch = useDispatch();
-  const { movies } = useSelector((state) => state.moviesReducer);
+  const movies = useSelector((state) => state.moviesReducer.movies);
 
   useEffect(() => {
     dispatch(getTrandingToStore());
-  }, [dispatch]);
+  }, []);
 
   return (
     <div className={styles.wrapper}>

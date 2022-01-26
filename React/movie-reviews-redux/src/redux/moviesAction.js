@@ -25,3 +25,10 @@ export const getMovieInfo = (id) => (dispatch) => getMovieWithId(id).then((data)
 export const getMovieCast = (id) => (dispatch) => getMovieCastWithId(id).then((data) => dispatch(getCast(data)));
 
 export const getMovieReviews = (id) => (dispatch) => getMovieReviewsWithId(id).then((data) => dispatch(getReviews(data)));
+
+export const clearMovieData = () => (dispatch) => {
+  dispatch(getOne(null));
+  dispatch(getCast(null));
+  dispatch(getReviews(null));
+};
+

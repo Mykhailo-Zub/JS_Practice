@@ -5,40 +5,31 @@ import { setFirstNameForm, setLastNameForm, setPhoneForm, setIsEditPopup } from 
 import Button from "../Button/Button";
 import styles from "./EditPopup.module.css";
 import { saveContactInfo } from "../redux/contactsAction";
+import { editSelector } from "../redux/selectors";
 
 const popUpParent = document.body;
 
-function EditPopup({
-  id,
-  setFirstNameForm,
-  setLastNameForm,
-  setPhoneForm,
-  setIsEditPopup,
-  saveContact,
-  firstNameForm,
-  firstNameOk,
-  lastNameForm,
-  lastNameOk,
-  phoneForm,
-  phoneOk,
-}) {
+function EditPopup({ id, setFirstNameForm, setLastNameForm, setPhoneForm, setIsEditPopup, saveContact, firstName, lastName, phone }) {
+  const { value: firstNameForm, isOk: firstNameOk } = firstName;
+  const { value: lastNameForm, isOk: lastNameOk } = lastName;
+  const { value: phoneForm, isOk: phoneOk } = phone;
   return ReactDOM.createPortal(
     <div className={styles.wrapper}>
       <div className={styles.heading}>{id ? "Change contact info" : "Add new contact"}</div>
       <label className={firstNameOk ? "" : styles.firstNameError}>
         <span>First name must contain from 1 to 10 characters</span>
-        <input type="text" value={firstNameForm} onChange={(e) => setFirstNameForm(e.target.value)} />
+        <input type="text" value={firstNameForm || ""} onChange={setFirstNameForm} />
         <div>First name</div>
       </label>
       <label className={lastNameOk ? "" : styles.lastNameError}>
         <span>Last name must contain from 1 to 20 characters</span>
-        <input type="text" value={lastNameForm} onChange={(e) => setLastNameForm(e.target.value)} />
+        <input type="text" value={lastNameForm || ""} onChange={setLastNameForm} />
         <div>Last name</div>
       </label>
       <label className={phoneOk ? "" : styles.phoneError}>
         <span>Phone number must contain 12 digits</span>
         <div>+</div>
-        <input className={styles.phone} type="text" value={phoneForm} onChange={(e) => setPhoneForm(e.target.value)} />
+        <input className={styles.phone} type="text" value={phoneForm || ""} onChange={setPhoneForm} />
         <div>Phone</div>
       </label>
       <div className={styles.buttons}>
@@ -51,16 +42,8 @@ function EditPopup({
 }
 
 const mapStateToProps = (state) => {
-  const id = state.contactsReducer.focusContactId;
-  return {
-    firstNameForm: state.editPopupComponentReducer.firstNameForm || "",
-    lastNameForm: state.editPopupComponentReducer.lastNameForm || "",
-    phoneForm: state.editPopupComponentReducer.phoneForm || "",
-    firstNameOk: state.editPopupComponentReducer.firstNameOk,
-    lastNameOk: state.editPopupComponentReducer.lastNameOk,
-    phoneOk: state.editPopupComponentReducer.phoneOk,
-    id,
-  };
+  const { firstName, lastName, phone, id } = editSelector(state);
+  return { firstName, lastName, phone, id };
 };
 
 const mapDispatchToProps = (dispatch) => {

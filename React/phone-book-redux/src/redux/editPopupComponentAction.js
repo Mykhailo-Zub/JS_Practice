@@ -1,48 +1,25 @@
 import mainAction from "./mainAction";
-import { FIRST_NAME, FIRST_NAME_OK, LAST_NAME, LAST_NAME_OK, PHONE, PHONE_OK, EDIT_POPUP } from "./types";
+import { extractValue } from "../helpers";
+import { FIRST_NAME, LAST_NAME, PHONE, EDIT_POPUP } from "./types";
 
-export const setIsEditPopup = (isPopup) => {
-  return mainAction(EDIT_POPUP, isPopup);
+export const setIsEditPopup = (value) => {
+  return mainAction(EDIT_POPUP, value);
 };
 
-const setFirstName = (text) => {
-  return mainAction(FIRST_NAME, text);
-};
-
-export const setFirstNameOk = (isOk) => {
-  return mainAction(FIRST_NAME_OK, isOk);
-};
-
-const setLastName = (text) => {
-  return mainAction(LAST_NAME, text);
-};
-
-export const setLastNameOk = (isOk) => {
-  return mainAction(LAST_NAME_OK, isOk);
-};
-
-const setPhone = (number) => {
-  return mainAction(PHONE, number);
-};
-
-export const setPhoneOk = (isOk) => {
-  return mainAction(PHONE_OK, isOk);
-};
-
-export const setFirstNameForm = (text) => (dispatch) => {
+export const setFirstNameForm = (event, isEmptyId) => (dispatch) => {
+  const text = extractValue(event);
   const checkResult = Boolean(text && text.length < 10);
-  dispatch(setFirstName(text));
-  dispatch(setFirstNameOk(checkResult));
+  dispatch(mainAction(FIRST_NAME, { value: text, isOk: isEmptyId || checkResult }));
 };
 
-export const setLastNameForm = (text) => (dispatch) => {
+export const setLastNameForm = (event, isEmptyId) => (dispatch) => {
+  const text = extractValue(event);
   const checkResult = Boolean(text && text.length < 20);
-  dispatch(setLastName(text));
-  dispatch(setLastNameOk(checkResult));
+  dispatch(mainAction(LAST_NAME, { value: text, isOk: isEmptyId || checkResult }));
 };
 
-export const setPhoneForm = (number) => (dispatch) => {
+export const setPhoneForm = (event, isEmptyId) => (dispatch) => {
+  const number = extractValue(event);
   const checkResult = Boolean(number && number.length === 12);
-  dispatch(setPhone(number));
-  dispatch(setPhoneOk(checkResult));
+  dispatch(mainAction(PHONE, { value: number, isOk: isEmptyId || checkResult }));
 };

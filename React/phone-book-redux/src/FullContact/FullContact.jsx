@@ -7,6 +7,7 @@ import styles from "./FullContact.module.css";
 import contactImg from "../img/contact-photo.png";
 import backImg from "../img/back.png";
 import { setIsEditPopup } from "../redux/editPopupComponentAction";
+import { focusContact } from "../redux/selectors";
 
 function FullContact({ firstName, lastName, phone, setIsEditPopup, setIsDeletePopup, setFocusContactId }) {
   return (
@@ -35,13 +36,11 @@ function FullContact({ firstName, lastName, phone, setIsEditPopup, setIsDeletePo
 }
 
 const mapStateToProps = (state) => {
-  const focusContactId = state.contactsReducer.focusContactId;
-  const { firstName, lastName, phone } = state.contactsReducer.contacts.find((el) => el.id === focusContactId) || {};
+  const { firstName, lastName, phone } = focusContact(state);
   return {
     firstName,
     lastName,
     phone,
-    focusContactId,
   };
 };
 

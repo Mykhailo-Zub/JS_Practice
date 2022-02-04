@@ -97,7 +97,7 @@ function App() {
       setValidSearchParams((prevSearchParams) => ({ ...prevSearchParams, memory: undefined }));
     }
     const currentScreen = searchParams.get("screen");
-    let newScreenFilter;
+    let newScreenFilter = [];
     if (
       currentScreen &&
       currentScreen
@@ -105,13 +105,10 @@ function App() {
         .map((el) => parseFloat(el))
         .some((el) => screen.find((elem) => elem === el))
     ) {
-      newScreenFilter = screen.reduce((acc, el, i) => {
-        return { ...acc, [el]: currentScreen.includes(el.toString()) };
-      }, {});
+      newScreenFilter = screen.map((el) => currentScreen.includes(el.toString()));
     } else {
-      newScreenFilter = screen.reduce((acc, el, i) => {
-        return { ...acc, [el]: true };
-      }, {});
+      newScreenFilter.length = screen.length;
+      newScreenFilter.fill(true);
     }
     setValidSearchParams((prevSearchParams) => ({ ...prevSearchParams, screen: newScreenFilter }));
   }, [searchParams, memory, screen]);
@@ -122,25 +119,19 @@ function App() {
     if (from && (from !== minPrice || to !== maxPrice)) params.price = `${from}-${to}`;
     if (text) params.text = text;
     if (memory && memory !== "All") params.memory = memory;
-    if (paramsScreen) {
-      const selectedScreen = [];
-      for (let el in paramsScreen) {
-        if (paramsScreen[el]) selectedScreen.push(el);
-      }
-      const selectedScreenString = selectedScreen.join(" ");
-      if (screen.join(" ") !== selectedScreenString) params.screen = selectedScreenString;
-    }
+    if (paramsScreen && paramsScreen.some((el) => !el)) params.screen = screen.filter((el, i) => paramsScreen[i]).join(" ");
     setSearchParams(params);
   }, [validSearchParams, minPrice, maxPrice, screen, setSearchParams]);
 
   const filteredProducts = products?.filter((el) => {
-    const { price: [minPrice, maxPrice] = [], text, memory: memoryFilter, screen: screenFilter } = validSearchParams;
-    const { price, screen, memory, name } = el;
+    const { price: [minPrice, maxPrice] = [], text, memory: memoryFilter, screen: screenFilter = [] } = validSearchParams;
+    const { price, screen: elementScreen, memory, name } = el;
+    const selectedScreens = screenFilter.length ? screen.filter((el, i) => screenFilter[i]) : [...screen];
     return (
       (minPrice && maxPrice ? price >= minPrice && price <= maxPrice : true) &&
       (text ? name.toLowerCase().includes(text.toLowerCase()) : true) &&
       (memoryFilter ? memoryFilter === memory : true) &&
-      screenFilter?.[screen]
+      selectedScreens?.find((el) => el === elementScreen)
     );
   });
 

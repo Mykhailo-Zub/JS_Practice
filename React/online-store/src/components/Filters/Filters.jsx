@@ -5,31 +5,31 @@ import CustomSelect from "../CustomSelect/CustomSelect";
 import CustomCheckbox from "../CustomCheckbox/CustomCheckbox";
 import CustomSlider from "../CustomSlider/CustomSlider";
 
+const TEXT = "TEXT";
+const PRICE = "PRICE";
+const MEMORY = "MEMORY";
+const SCREEN = "SCREEN";
+
 function Filters({ minPrice, maxPrice, memory, screen, searchParams, setSearchParams, saveSearchParams }) {
   const { price: paramsPrice, text: paramsText, memory: paramsMemory, screen: paramsScreen = {} } = searchParams;
-
-  const screenHandler = (option, value) => {
-    /*  на счет замечания "к тому же, значения ты можешь хранить
-    в формате массива выбранных размеров, чтобы избежать хранения
-    общего: всех значений и выбранных среди них"
-      --мне же в любом случае нужен массив всех значений, чтобы построить список чекбоксов */
-    const params = { ...searchParams };
-    params.screen = { ...paramsScreen };
-    params.screen[option] = value;
-    setSearchParams(params);
-  };
 
   const handleSearchParams = (parameter, value) => {
     const params = { ...searchParams };
     switch (parameter) {
-      case "Search by name:":
+      case TEXT:
         params.text = value;
         break;
-      case "Price range":
+      case PRICE:
         params.price = value;
         break;
-      case "Memory:":
+      case MEMORY:
         params.memory = value !== "All" ? parseInt(value) : "";
+        break;
+      case SCREEN:
+        const [index, isSelected] = value;
+        const newParamsScreen = [...paramsScreen];
+        newParamsScreen[index] = isSelected;
+        params.screen = newParamsScreen;
         break;
       default:
         break;
@@ -41,13 +41,20 @@ function Filters({ minPrice, maxPrice, memory, screen, searchParams, setSearchPa
     <div className={styles.wrapper}>
       <div className={styles.header}>Filters</div>
       <div className={styles.textBlock}>
-        <CustomTextInput value={paramsText || ""} changeFunction={handleSearchParams} label="Search by name:" />
+        <CustomTextInput value={paramsText || ""} changeFunction={handleSearchParams} label="Search by name:" handlerId={TEXT} />
       </div>
 
       <div className={styles.priceBlock}>
         <div className={styles.blockName}>Price:</div>
         <div className={styles.priceSlider}>
-          <CustomSlider label="Price range" value={paramsPrice} minValue={minPrice} maxValue={maxPrice} changeFunction={handleSearchParams} />
+          <CustomSlider
+            label="Price range"
+            value={paramsPrice}
+            minValue={minPrice}
+            maxValue={maxPrice}
+            changeFunction={handleSearchParams}
+            handlerId={PRICE}
+          />
         </div>
       </div>
       <div className={styles.memoryBlock}>
@@ -58,12 +65,21 @@ function Filters({ minPrice, maxPrice, memory, screen, searchParams, setSearchPa
           optionsArr={memory}
           defaultValue="All"
           optionPostfix=" GB"
+          handlerId={MEMORY}
         />
       </div>
       <div className={styles.screenBlock}>
         <div className={styles.screenBlockHeader}>Screen size:</div>
         {screen?.map((el, i) => (
-          <CustomCheckbox key={i} value={paramsScreen[el] || false} changeFunction={screenHandler} label={el} labelPostfix='"' />
+          <CustomCheckbox
+            key={i}
+            value={paramsScreen[i] || false}
+            changeFunction={handleSearchParams}
+            label={el}
+            labelPostfix='"'
+            handlerId={SCREEN}
+            index={i}
+          />
         ))}
       </div>
       <button onClick={saveSearchParams}>Save filters</button>

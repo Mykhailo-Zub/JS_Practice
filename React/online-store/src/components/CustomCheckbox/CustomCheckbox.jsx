@@ -1,10 +1,10 @@
 import React from "react";
 
-function CustomCheckbox({ value, changeFunction, label, labelPostfix, handlerId, index }) {
+function CustomCheckbox({ value, changeFunction, label, labelPostfix, index }) {
   return (
     <>
       <label>
-        <input type="checkbox" checked={value} onChange={(e) => changeFunction(handlerId, [index, e.target.checked])} />
+        <input type="checkbox" checked={value} onChange={(e) => changeFunction([index, e.target.checked])} />
         {label}
         {labelPostfix}
       </label>

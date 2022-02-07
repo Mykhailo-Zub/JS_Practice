@@ -11,7 +11,7 @@ const MEMORY = "MEMORY";
 const SCREEN = "SCREEN";
 
 function Filters({ minPrice, maxPrice, memory, screen, searchParams, setSearchParams, saveSearchParams }) {
-  const { price: paramsPrice, text: paramsText, memory: paramsMemory, screen: paramsScreen = {} } = searchParams;
+  const { price: paramsPrice, text: paramsText, memory: paramsMemory, screen: paramsScreen = [] } = searchParams;
 
   const handleSearchParams = (parameter, value) => {
     const params = { ...searchParams };
@@ -27,9 +27,8 @@ function Filters({ minPrice, maxPrice, memory, screen, searchParams, setSearchPa
         break;
       case SCREEN:
         const [index, isSelected] = value;
-        const newParamsScreen = [...paramsScreen];
-        newParamsScreen[index] = isSelected;
-        params.screen = newParamsScreen;
+        const newParamsScreen = isSelected ? [...paramsScreen, screen[index]] : paramsScreen.filter((el) => el !== screen[index]);
+        params.screen = newParamsScreen.sort((a, b) => a - b);
         break;
       default:
         break;
@@ -41,7 +40,13 @@ function Filters({ minPrice, maxPrice, memory, screen, searchParams, setSearchPa
     <div className={styles.wrapper}>
       <div className={styles.header}>Filters</div>
       <div className={styles.textBlock}>
-        <CustomTextInput value={paramsText || ""} changeFunction={handleSearchParams} label="Search by name:" handlerId={TEXT} />
+        <CustomTextInput
+          value={paramsText || ""}
+          changeFunction={(value) => {
+            handleSearchParams(TEXT, value);
+          }}
+          label="Search by name:"
+        />
       </div>
 
       <div className={styles.priceBlock}>
@@ -52,20 +57,22 @@ function Filters({ minPrice, maxPrice, memory, screen, searchParams, setSearchPa
             value={paramsPrice}
             minValue={minPrice}
             maxValue={maxPrice}
-            changeFunction={handleSearchParams}
-            handlerId={PRICE}
+            changeFunction={(value) => {
+              handleSearchParams(PRICE, value);
+            }}
           />
         </div>
       </div>
       <div className={styles.memoryBlock}>
         <CustomSelect
           value={paramsMemory}
-          changeFunction={handleSearchParams}
+          changeFunction={(value) => {
+            handleSearchParams(MEMORY, value);
+          }}
           label="Memory:"
           optionsArr={memory}
           defaultValue="All"
           optionPostfix=" GB"
-          handlerId={MEMORY}
         />
       </div>
       <div className={styles.screenBlock}>
@@ -73,11 +80,12 @@ function Filters({ minPrice, maxPrice, memory, screen, searchParams, setSearchPa
         {screen?.map((el, i) => (
           <CustomCheckbox
             key={i}
-            value={paramsScreen[i] || false}
-            changeFunction={handleSearchParams}
+            value={paramsScreen.some((elem) => el === elem) || false}
+            changeFunction={(value) => {
+              handleSearchParams(SCREEN, value);
+            }}
             label={el}
             labelPostfix='"'
-            handlerId={SCREEN}
             index={i}
           />
         ))}

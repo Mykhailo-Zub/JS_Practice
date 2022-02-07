@@ -97,19 +97,7 @@ function App() {
       setValidSearchParams((prevSearchParams) => ({ ...prevSearchParams, memory: undefined }));
     }
     const currentScreen = searchParams.get("screen");
-    let newScreenFilter = [];
-    if (
-      currentScreen &&
-      currentScreen
-        .split(" ")
-        .map((el) => parseFloat(el))
-        .some((el) => screen.find((elem) => elem === el))
-    ) {
-      newScreenFilter = screen.map((el) => currentScreen.includes(el.toString()));
-    } else {
-      newScreenFilter.length = screen.length;
-      newScreenFilter.fill(true);
-    }
+    let newScreenFilter = currentScreen ? screen.filter((el) => currentScreen.includes(el.toString())) : [...screen];
     setValidSearchParams((prevSearchParams) => ({ ...prevSearchParams, screen: newScreenFilter }));
   }, [searchParams, memory, screen]);
 
@@ -119,19 +107,18 @@ function App() {
     if (from && (from !== minPrice || to !== maxPrice)) params.price = `${from}-${to}`;
     if (text) params.text = text;
     if (memory && memory !== "All") params.memory = memory;
-    if (paramsScreen && paramsScreen.some((el) => !el)) params.screen = screen.filter((el, i) => paramsScreen[i]).join(" ");
+    if (paramsScreen.length !== screen.length) params.screen = paramsScreen.length ? paramsScreen.join(" ") : "none";
     setSearchParams(params);
   }, [validSearchParams, minPrice, maxPrice, screen, setSearchParams]);
 
   const filteredProducts = products?.filter((el) => {
     const { price: [minPrice, maxPrice] = [], text, memory: memoryFilter, screen: screenFilter = [] } = validSearchParams;
     const { price, screen: elementScreen, memory, name } = el;
-    const selectedScreens = screenFilter.length ? screen.filter((el, i) => screenFilter[i]) : [...screen];
     return (
       (minPrice && maxPrice ? price >= minPrice && price <= maxPrice : true) &&
       (text ? name.toLowerCase().includes(text.toLowerCase()) : true) &&
       (memoryFilter ? memoryFilter === memory : true) &&
-      selectedScreens?.find((el) => el === elementScreen)
+      screenFilter?.find((el) => el === elementScreen)
     );
   });
 

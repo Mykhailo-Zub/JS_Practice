@@ -1,7 +1,7 @@
 import React from "react";
 import Slider from "@mui/material/Slider";
 
-function CustomSlider({ value, minValue, maxValue, changeFunction, label, handlerId }) {
+function CustomSlider({ value, minValue, maxValue, changeFunction, label }) {
   return (
     <>
       <Slider
@@ -9,7 +9,7 @@ function CustomSlider({ value, minValue, maxValue, changeFunction, label, handle
         value={value || [minValue, maxValue]}
         min={minValue}
         max={maxValue}
-        onChange={(e) => changeFunction(handlerId, [...e.target.value])}
+        onChange={(e) => changeFunction([...e.target.value])}
         valueLabelDisplay="auto"
         getAriaValueText={() => `${value} UAH`}
       />

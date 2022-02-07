@@ -6,6 +6,7 @@ import Button from "../Button/Button";
 import styles from "./EditPopup.module.css";
 import { saveContactInfo } from "../redux/contactsAction";
 import { editSelector } from "../redux/selectors";
+import CustomInput from "../CustomInput/CustomInput";
 
 const popUpParent = document.body;
 
@@ -13,25 +14,33 @@ function EditPopup({ id, setFirstNameForm, setLastNameForm, setPhoneForm, setIsE
   const { value: firstNameForm, isOk: firstNameOk } = firstName;
   const { value: lastNameForm, isOk: lastNameOk } = lastName;
   const { value: phoneForm, isOk: phoneOk } = phone;
+
   return ReactDOM.createPortal(
     <div className={styles.wrapper}>
       <div className={styles.heading}>{id ? "Change contact info" : "Add new contact"}</div>
-      <label className={firstNameOk ? "" : styles.firstNameError}>
-        <span>First name must contain from 1 to 10 characters</span>
-        <input type="text" value={firstNameForm || ""} onChange={setFirstNameForm} />
-        <div>First name</div>
-      </label>
-      <label className={lastNameOk ? "" : styles.lastNameError}>
-        <span>Last name must contain from 1 to 20 characters</span>
-        <input type="text" value={lastNameForm || ""} onChange={setLastNameForm} />
-        <div>Last name</div>
-      </label>
-      <label className={phoneOk ? "" : styles.phoneError}>
-        <span>Phone number must contain 12 digits</span>
-        <div>+</div>
-        <input className={styles.phone} type="text" value={phoneForm || ""} onChange={setPhoneForm} />
-        <div>Phone</div>
-      </label>
+      <CustomInput
+        isError={firstNameOk ? "" : styles.firstNameError}
+        value={firstNameForm}
+        errorText="First name must contain from 1 to 10 characters"
+        postfix="First name"
+        changeFunction={setFirstNameForm}
+      />
+      <CustomInput
+        isError={lastNameOk ? "" : styles.lastNameError}
+        value={lastNameForm}
+        errorText="Last name must contain from 1 to 20 characters"
+        postfix="Last name"
+        changeFunction={setLastNameForm}
+      />
+      <CustomInput
+        isError={phoneOk ? "" : styles.phoneError}
+        value={phoneForm}
+        errorText="Phone number must contain 12 digits"
+        prefix="+"
+        postfix="Phone"
+        changeFunction={setPhoneForm}
+        isPhone={true}
+      />
       <div className={styles.buttons}>
         <Button text={id ? "Save changes" : "Save new contact"} clickHandler={saveContact} />
         <Button text="Go back" clickHandler={setIsEditPopup} />

@@ -36,7 +36,7 @@ export const saveContactInfo = () => (dispatch, getState) => {
 };
 
 export const deleteContact = () => (dispatch, getState) => {
-  const id = getState().contactsReducer.focusContactId;
+  const { id } = editSelector(getState());
   deleteSelectedContact(id).then(() => {
     dispatch(setFocusContactId(null));
     dispatch(setIsDeletePopup(false));

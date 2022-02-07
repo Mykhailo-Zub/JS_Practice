@@ -1,0 +1,10 @@
+.phone {
+    width: 80%;
+    padding-left: 60px;
+}
+
+@media screen and (max-width: 1024px) {      
+    .phone {
+        padding-left: 6vw;
+    }
+}

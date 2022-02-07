@@ -87,14 +87,9 @@ label span::after {
 
 label div:nth-child(2) {
     position: absolute;
-    top: 26px;
+    top: 20px;
     left: 128px;
     color: black;
-}
-
-.phone {
-    width: 80%;
-    padding-left: 60px;
 }
 
 @media screen and (max-width: 1024px) {    
@@ -141,11 +136,7 @@ label div:nth-child(2) {
     }
     
     label div:nth-child(2) {
-        top: 3.7vw;
+        top: 3vw;
         left: 13vw;
-    }
-    
-    .phone {
-        padding-left: 6vw;
     }
 }

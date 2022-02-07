@@ -13,7 +13,7 @@ function FullContact({ firstName, lastName, phone, setIsEditPopup, setIsDeletePo
   return (
     <div className={styles.wrapper}>
       <div className={styles.blur}>
-        <div className={styles.back} onClick={() => setFocusContactId(null)}>
+        <div className={styles.back} onClick={setFocusContactId}>
           <div className={styles.arrow}>
             <img src={backImg} alt="back" />
           </div>

@@ -1,0 +1,36 @@
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    width: 100%;
+    height: 100%;
+    color: rgb(255, 246, 235);
+    margin: 20px 30px;
+    font-size: 20px;
+  }
+
+  .author {
+    font-size: 25px;
+    margin: 5px 50px;
+  }
+
+  .link {
+    margin: 5px 50px 10px;
+  }
+
+  .back {
+    cursor: pointer;
+    align-self: start;
+    margin: 20px 30px;
+    font-size: 30px;
+  }
+
+  a {
+      color: #ffffff;
+  }
+
+  .content {
+    font-size: 20px;
+  }
+  

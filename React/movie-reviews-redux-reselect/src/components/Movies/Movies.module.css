@@ -1,0 +1,16 @@
+.wrapper {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.wrapper > a {
+    margin: 40px;
+    text-decoration: none;
+}
+
+.wrapper > a:visited {
+    
+    margin: 40px;
+    text-decoration: none;
+}

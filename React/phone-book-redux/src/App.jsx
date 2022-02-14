@@ -5,7 +5,7 @@ import DeletePopup from "./DeletePopup/DeletePopup";
 import FullContact from "./FullContact/FullContact";
 import { connect } from "react-redux";
 import { getContactsToStore } from "./redux/contactsAction";
-import { editSelector } from "./redux/selectors";
+import { focusContactId } from "./redux/selectors";
 
 function App({ focusContactId, isDeletePopup, isEditPopup, getAndSetContacts }) {
   useEffect(() => {
@@ -22,9 +22,8 @@ function App({ focusContactId, isDeletePopup, isEditPopup, getAndSetContacts }) 
 }
 
 const mapStateToProps = (state) => {
-  const { id } = editSelector(state);
   return {
-    focusContactId: id,
+    focusContactId: focusContactId(state),
     isDeletePopup: state.deletePopupHandlerReducer.isDeletePopup,
     isEditPopup: state.editPopupComponentReducer.isEditPopup,
   };

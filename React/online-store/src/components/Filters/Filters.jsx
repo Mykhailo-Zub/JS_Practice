@@ -26,8 +26,8 @@ function Filters({ minPrice, maxPrice, memory, screen, searchParams, setSearchPa
         params.memory = value !== "All" ? parseInt(value) : "";
         break;
       case SCREEN:
-        const [index, isSelected] = value;
-        const newParamsScreen = isSelected ? [...paramsScreen, screen[index]] : paramsScreen.filter((el) => el !== screen[index]);
+        const [currentScreen, isSelected] = value;
+        const newParamsScreen = isSelected ? [...paramsScreen, currentScreen] : paramsScreen.filter((el) => el !== currentScreen);
         params.screen = newParamsScreen.sort((a, b) => a - b);
         break;
       default:
@@ -80,13 +80,12 @@ function Filters({ minPrice, maxPrice, memory, screen, searchParams, setSearchPa
         {screen?.map((el, i) => (
           <CustomCheckbox
             key={i}
-            value={paramsScreen.some((elem) => el === elem) || false}
+            value={paramsScreen.find((elem) => el === elem) || false}
             changeFunction={(value) => {
-              handleSearchParams(SCREEN, value);
+              handleSearchParams(SCREEN, [el, value]);
             }}
             label={el}
             labelPostfix='"'
-            index={i}
           />
         ))}
       </div>

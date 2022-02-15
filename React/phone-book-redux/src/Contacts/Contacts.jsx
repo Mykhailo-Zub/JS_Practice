@@ -6,6 +6,7 @@ import styles from "./Contacts.module.css";
 import contactsImg from "../img/contact-list.png";
 import { setIsEditPopup } from "../redux/editPopupComponentAction";
 import { setFocusContactId } from "../redux/contactsAction";
+import { contactsSelector } from "../redux/selectors";
 
 function Contacts({ contacts, setIsEditPopup, setFocusContact }) {
   return (
@@ -29,7 +30,7 @@ function Contacts({ contacts, setIsEditPopup, setFocusContact }) {
 
 const mapStateToProps = (state) => {
   return {
-    contacts: state.contactsReducer.contacts,
+    contacts: contactsSelector(state),
   };
 };
 

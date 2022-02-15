@@ -5,8 +5,9 @@ import Button from "../Button/Button";
 import styles from "./Contacts.module.css";
 import contactsImg from "../img/contact-list.png";
 import { setIsEditPopup } from "../redux/editPopupComponentAction";
+import { setFocusContactId } from "../redux/contactsAction";
 
-function Contacts({ contacts, setIsEditPopup }) {
+function Contacts({ contacts, setIsEditPopup, setFocusContact }) {
   return (
     <div className={styles.wrapper}>
       <div className={styles.blur}>
@@ -17,7 +18,7 @@ function Contacts({ contacts, setIsEditPopup }) {
         <div className={styles.contacts}>
           {contacts?.map((el) => {
             const { firstName, lastName, phone, id } = el;
-            return <Contact firstName={firstName} lastName={lastName} phone={phone} id={id} key={id} />;
+            return <Contact firstName={firstName} lastName={lastName} phone={phone} id={id} key={id} setFocusContact={setFocusContact} />;
           })}
         </div>
         <Button additionalClass={styles.addBtn} clickHandler={setIsEditPopup} />
@@ -35,6 +36,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     setIsEditPopup: () => dispatch(setIsEditPopup(true)),
+    setFocusContact: (id) => dispatch(setFocusContactId(id)),
   };
 };
 

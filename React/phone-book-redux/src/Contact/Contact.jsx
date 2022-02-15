@@ -1,8 +1,6 @@
 import React from "react";
-import { connect } from "react-redux";
 import styles from "./Contact.module.css";
 import contactImg from "../img/contact-photo.png";
-import { setFocusContactId } from "../redux/contactsAction";
 
 function Contact({ firstName, lastName, phone, id, setFocusContact }) {
   return (
@@ -19,10 +17,4 @@ function Contact({ firstName, lastName, phone, id, setFocusContact }) {
   );
 }
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    setFocusContact: (id) => dispatch(setFocusContactId(id)),
-  };
-};
-
-export default connect(null, mapDispatchToProps)(Contact);
+export default Contact;

@@ -1,3 +1,7 @@
+export const focusContactId = (state) => {
+  return state.contactsReducer.focusContactId;
+};
+
 export const editSelector = (state) => {
   const reducer = state.editPopupComponentReducer;
   return {
@@ -12,8 +16,4 @@ export const focusContact = (state) => {
   const reducer = state.contactsReducer;
   const id = focusContactId(state);
   return reducer.contacts.find((el) => el.id === id) || {};
-};
-
-export const focusContactId = (state) => {
-  return state.contactsReducer.focusContactId;
 };

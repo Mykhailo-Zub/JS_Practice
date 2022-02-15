@@ -80,7 +80,7 @@ function Filters({ minPrice, maxPrice, memory, screen, searchParams, setSearchPa
         {screen?.map((el, i) => (
           <CustomCheckbox
             key={i}
-            value={paramsScreen.find((elem) => el === elem) || false}
+            value={paramsScreen.includes(el) || false}
             changeFunction={(value) => {
               handleSearchParams(SCREEN, [el, value]);
             }}

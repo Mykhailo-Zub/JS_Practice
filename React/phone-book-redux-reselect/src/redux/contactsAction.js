@@ -3,7 +3,7 @@ import { setIsDeletePopup } from "./deletePopupHandlerAction";
 import { setFirstNameForm, setIsEditPopup, setLastNameForm, setPhoneForm } from "./editPopupComponentAction";
 import mainAction from "./mainAction";
 import { GET_ALL, FOCUS_CONTACT_ID } from "./types";
-import { editSelector, focusContact } from "./selectors";
+import { firstNameSelector, focusContactId, lastNameSelector, phoneSelector, focusContact } from "./selectors";
 
 export const getContactsToStore = () => (dispatch) => getAllContacts().then((data) => dispatch(mainAction(GET_ALL, data)));
 
@@ -18,14 +18,11 @@ export const setFocusContactId = (id) => (dispatch, getState) => {
 
 export const saveContactInfo = () => (dispatch, getState) => {
   const state = getState();
-  const {
-    firstName: { value: firstName, isOk: firstNameOk },
-    lastName: { value: lastName, isOk: lastNameOk },
-    phone: { value: phone, isOk: phoneOk },
-    id,
-  } = editSelector(state);
+  const { value: firstName, isOk: firstNameOk } = firstNameSelector(state);
+  const { value: lastName, isOk: lastNameOk } = lastNameSelector(state);
+  const { value: phone, isOk: phoneOk } = phoneSelector(state);
+  const id = focusContactId(state);
   if (firstName && firstNameOk && lastName && lastNameOk && phone && phoneOk) {
-    // касательно замечания: не достаточно, т.к. пока пользователь ничего не вводил, поля помечены валидными
     const contact = { firstName, lastName, phone: "+" + phone };
     saveContact(contact, id).then(() => {
       dispatch(setFocusContactId(null));
@@ -36,7 +33,7 @@ export const saveContactInfo = () => (dispatch, getState) => {
 };
 
 export const deleteContact = () => (dispatch, getState) => {
-  const { id } = editSelector(getState());
+  const id = focusContactId(getState());
   deleteSelectedContact(id).then(() => {
     dispatch(setFocusContactId(null));
     dispatch(setIsDeletePopup(false));

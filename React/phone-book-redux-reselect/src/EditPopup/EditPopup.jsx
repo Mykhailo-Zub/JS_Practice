@@ -5,7 +5,7 @@ import { setFirstNameForm, setLastNameForm, setPhoneForm, setIsEditPopup } from 
 import Button from "../Button/Button";
 import styles from "./EditPopup.module.css";
 import { saveContactInfo } from "../redux/contactsAction";
-import { editSelector } from "../redux/selectors";
+import { firstNameSelector, focusContactId, lastNameSelector, phoneSelector } from "../redux/selectors";
 import CustomInput from "../CustomInput/CustomInput";
 
 const popUpParent = document.body;
@@ -51,8 +51,12 @@ function EditPopup({ id, setFirstNameForm, setLastNameForm, setPhoneForm, setIsE
 }
 
 const mapStateToProps = (state) => {
-  const { firstName, lastName, phone, id } = editSelector(state);
-  return { firstName, lastName, phone, id };
+  return {
+    firstName: firstNameSelector(state),
+    lastName: lastNameSelector(state),
+    phone: phoneSelector(state),
+    id: focusContactId(state),
+  };
 };
 
 const mapDispatchToProps = (dispatch) => {

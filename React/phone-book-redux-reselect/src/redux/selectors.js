@@ -1,23 +1,18 @@
 import { createSelector } from "reselect";
 
-const focusContactIdSelector = (state) => state.contactsReducer.focusContactId;
+export const focusContactId = (state) => state.contactsReducer.focusContactId;
 
-const contacts = (state) => state.contactsReducer.contacts;
+export const contactsSelector = (state) => state.contactsReducer.contacts;
 
-const edit = (state) => {
-  const reducer = state.editPopupComponentReducer;
-  return {
-    firstName: reducer.firstNameForm,
-    lastName: reducer.lastNameForm,
-    phone: reducer.phoneForm,
-    id: focusContactId(state),
-  };
-};
+export const firstNameSelector = (state) => state.editPopupComponentReducer.firstNameForm;
 
-export const focusContactId = createSelector(focusContactIdSelector, (id) => id);
+export const lastNameSelector = (state) => state.editPopupComponentReducer.lastNameForm;
 
-export const contactsSelector = createSelector(contacts, (contacts) => contacts);
+export const phoneSelector = (state) => state.editPopupComponentReducer.phoneForm;
 
-export const editSelector = createSelector(edit, (editForm) => editForm);
+const emptyContact = {};
 
-export const focusContact = createSelector(contacts, focusContactIdSelector, (contacts, id) => contacts.find((el) => el.id === id) || {});
+export const focusContact = createSelector(contactsSelector, focusContactId, (contacts, id) => {
+  const foundedContact = contacts.find((el) => el.id === id);
+  return foundedContact ? foundedContact : emptyContact;
+});

@@ -12,7 +12,4 @@ export const phoneSelector = (state) => state.editPopupComponentReducer.phoneFor
 
 const emptyContact = {};
 
-export const focusContact = createSelector(contactsSelector, focusContactId, (contacts, id) => {
-  const foundedContact = contacts.find((el) => el.id === id);
-  return foundedContact ? foundedContact : emptyContact;
-});
+export const focusContact = createSelector(contactsSelector, focusContactId, (contacts, id) => contacts.find((el) => el.id === id) || emptyContact);

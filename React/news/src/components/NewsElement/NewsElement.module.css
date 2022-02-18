@@ -1,0 +1,47 @@
+.wrapper {
+    display: flex;
+    width: calc(50% - 60px);
+    margin: 30px;
+}
+
+.image {
+    width: calc(40% - 20px);
+    margin-right: 20px;
+}
+
+.text {
+    width: 60%;
+}
+
+.image img {
+    width: 100%;
+}
+
+.heading {
+    font-size: 25px;
+    color: rgb(255, 218, 218);
+    text-decoration: none;
+}
+
+.row {
+    margin-top: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.description {
+    margin-top: 10px;
+}
+
+.keywords {
+    margin-top: 10px;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.keywords div {
+    margin-right: 10px;
+    color: rgb(79, 126, 255);
+    cursor: pointer;
+}

@@ -1,0 +1,44 @@
+{
+  "English": {
+    "lang": "en",
+    "heading": "News",
+    "category": "Category",
+    "categories": ["business", "entertainment", "environment", "food", "health", "politics", "science", "sports", "technology", "top", "world"],
+    "search": "Search",
+    "loadMore": "Load more",
+    "published": "Published",
+    "source": "Source"
+  },
+  "Deutsch": {
+    "lang": "de",
+    "heading": "Neuigkeiten",
+    "category": "Kategorie",
+    "categories": ["Wirtschaft", "Unterhaltung", "Umwelt", "Ernährung", "Gesundheit", "Politik", "Wissenschaft", "Sport", "Technik", "Top", "Welt"],
+    "search": "Suche",
+    "loadMore": "Mehr laden",
+    "published": "Veröffentlicht",
+    "source": "Quelle"
+  },
+  "Español": {
+    "lang": "es",
+    "heading": "Noticias",
+    "category": "Categoría",
+    "categories": [
+      "negocios",
+      "entretenimiento",
+      "medio ambiente",
+      "comida",
+      "salud",
+      "política",
+      "ciencia",
+      "deportes",
+      "tecnología",
+      "superior",
+      "mundo"
+    ],
+    "search": "Búsqueda",
+    "loadMore": "Carga más",
+    "published": "Publicado",
+    "source": "Fuente"
+  }
+}

@@ -1,0 +1,53 @@
+.wrapper {
+    display: flex;
+    justify-content: space-around;
+
+}
+
+.categoryContainer, .searchContainer {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    height: 100px;
+    justify-content: center;
+    width: auto;
+}
+
+.categoryContainer select {
+    width: 200px;
+    height: 30px;
+    color: #fff;
+    background-color: rgb(0, 65, 119);
+    border: 2px solid rgb(184, 184, 184);
+    border-radius: 3px;
+}
+
+.inputWrapper {
+    display: flex;
+}
+
+.inputWrapper input {
+    width: 200px;
+    height: 30px;
+    color: #fff;
+    background-color: rgb(0, 65, 119);
+    border: 2px solid rgb(184, 184, 184);
+    border-radius: 3px;
+}
+
+.inputWrapper button {
+    margin-left: 5px;
+    color: #fff;
+    background-color: rgb(0, 65, 119);
+    border: 2px solid rgb(184, 184, 184);
+    border-radius: 3px;
+}
+
+.searchContainer label {
+    font-size: 20px;
+    margin-bottom: 5px;
+}
+.categoryContainer label {
+    font-size: 20px;
+    margin-bottom: 5px;
+}

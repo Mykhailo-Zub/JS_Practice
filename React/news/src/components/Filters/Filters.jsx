@@ -3,66 +3,48 @@ import CustomSelect from "../CustomSelect/CustomSelect";
 import styles from "./Filters.module.css";
 import translations from "../../tranlations.json";
 import { LangContext } from "../../context";
-import getLatestNews from "../../requests";
 import WordsWrapper from "../WordsWrapper/WordsWrapper";
 
-function Filters({ setNews, page, setNextPage }) {
+function Filters({ filters, setFilters, categories }) {
   const { currentLang } = useContext(LangContext);
-  const { lang, categories } = translations[currentLang];
-  const [category, setCategory] = useState(categories[0]);
-  const [search, setSearch] = useState(null);
-
-  const getAndAddNews = (isNext, isCategory) => {
-    const categoryIndex = translations[currentLang]["categories"].findIndex((el) => el === (isCategory ? isCategory : category));
-    const searchingCategory = translations["English"]["categories"][categoryIndex] || "business";
-    getLatestNews(lang, searchingCategory, search, isNext ? page : 0).then(({ results, nextPage }) => {
-      setNews(
-        isNext
-          ? (prevNews) => {
-              return [...prevNews, ...results];
-            }
-          : results
-      );
-    });
-  };
-
-  useEffect(() => {
-    getAndAddNews(page > 0);
-  }, [page]);
-
-  useEffect(() => {
-    setSearch(null);
-  }, [currentLang]);
-
-  const newSearch = (isCategory) => {
-    if (page === 0) {
-      getAndAddNews(false, isCategory);
-    } else {
-      setNextPage(0);
-    }
-  };
+  const { category, keyword } = filters;
+  const [filterCategory, setFilterCategory] = useState(category);
+  const [search, setSearch] = useState(keyword);
 
   const changeCategory = useCallback((value) => {
-    setCategory(value);
-    newSearch(value);
+    setFilterCategory(value);
   }, []);
 
-  const memoizedCategories = useMemo(() => categories, [currentLang]);
+  const newSearch = () => {
+    setFilters({ category: filterCategory, keyword: search, page: 0 });
+  };
+
+  useEffect(() => {
+    const { category, keyword } = filters;
+    setFilterCategory(category);
+    setSearch(keyword);
+  }, [filters]);
+
+  const memoizedCategories = useMemo(() => categories.map((el) => translations[currentLang][el]), [currentLang]);
 
   return (
     <div className={styles.wrapper}>
-      <div className={styles.categoryContainer}>
-        <CustomSelect value={category || ""} label={"category"} optionsArr={memoizedCategories} changeFunction={changeCategory} />
-      </div>
-      <div className={styles.searchContainer}>
-        <label htmlFor="search">
-          <WordsWrapper langKey={"search"} />
-        </label>
-        <div className={styles.inputWrapper}>
-          <input id="search" type="text" value={search || ""} onChange={(e) => setSearch(e.target.value)} />
-          <button onClick={newSearch}>&#128269;</button>
+      <div className={styles.inputsWrapper}>
+        <div className={styles.categoryContainer}>
+          <CustomSelect value={filterCategory || ""} label={"category"} optionsArr={memoizedCategories} changeFunction={changeCategory} />
+        </div>
+        <div className={styles.searchContainer}>
+          <label htmlFor="search">
+            <WordsWrapper langKey={"keyword"} />
+          </label>
+          <div className={styles.search}>
+            <input id="search" type="text" value={search || ""} onChange={(e) => setSearch(e.target.value)} />
+          </div>
         </div>
       </div>
+      <button className={styles.searchButton} onClick={newSearch}>
+        <WordsWrapper langKey={"search"} />
+      </button>
     </div>
   );
 }

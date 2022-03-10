@@ -23,9 +23,11 @@ function News({ news, setNextPage }) {
           );
         })}
       </div>
-      <button onClick={() => setNextPage((prevPage) => prevPage + 1)}>
-        <WordsWrapper langKey={"loadMore"} />
-      </button>
+      {news?.length ? (
+        <button onClick={setNextPage}>
+          <WordsWrapper langKey={"loadMore"} />
+        </button>
+      ) : null}
     </div>
   );
 }

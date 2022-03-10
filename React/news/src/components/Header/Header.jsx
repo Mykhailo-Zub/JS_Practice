@@ -1,16 +1,10 @@
 import React, { useContext } from "react";
 import CustomSelect from "../CustomSelect/CustomSelect";
 import styles from "./Header.module.css";
-import translations from "../../tranlations.json";
 import { LangContext } from "../../context";
 import WordsWrapper from "../WordsWrapper/WordsWrapper";
 
-const languges = [];
-for (let language in translations) {
-  languges.push(language);
-}
-
-function Header() {
+function Header({ languges }) {
   const { currentLang, changeLang } = useContext(LangContext);
 
   return (

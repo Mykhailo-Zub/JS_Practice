@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import CustomSelect from "../CustomSelect/CustomSelect";
+import LangSelect from "../LangSelect/LangSelect";
 import styles from "./Header.module.css";
 import { LangContext } from "../../context";
 import WordsWrapper from "../WordsWrapper/WordsWrapper";
@@ -13,7 +13,7 @@ function Header({ languges }) {
         <WordsWrapper langKey="heading" />
       </h1>
       <div className={styles.languageContainer}>
-        <CustomSelect value={currentLang} optionsArr={languges} changeFunction={changeLang} />
+        <LangSelect value={currentLang} optionsArr={languges} changeFunction={changeLang} />
       </div>
     </div>
   );

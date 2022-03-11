@@ -1,6 +1,6 @@
 {
-  "English": {
-    "lang": "en",
+  "en": {
+    "lang": "English",
     "heading": "News",
     "category": "Category",
     "business": "business",
@@ -20,8 +20,8 @@
     "source": "Source",
     "keyword": "Keyword"
   },
-  "Deutsch": {
-    "lang": "de",
+  "de": {
+    "lang": "Deutsch",
     "heading": "Neuigkeiten",
     "category": "Kategorie",
     "business": "Wirtschaft",
@@ -41,8 +41,8 @@
     "source": "Quelle",
     "keyword": "Stichwort"
   },
-  "Español": {
-    "lang": "es",
+  "es": {
+    "lang": "Español",
     "heading": "Noticias",
     "category": "Categoría",
     "business": "negocios",

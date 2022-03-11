@@ -5,9 +5,8 @@ import translations from "../../tranlations.json";
 import { LangContext } from "../../context";
 import WordsWrapper from "../WordsWrapper/WordsWrapper";
 
-function Filters({ filters, setFilters, categories }) {
+function Filters({ category, keyword, setCurrentFilters, categories }) {
   const { currentLang } = useContext(LangContext);
-  const { category, keyword } = filters;
   const [filterCategory, setFilterCategory] = useState(category);
   const [search, setSearch] = useState(keyword);
 
@@ -16,16 +15,15 @@ function Filters({ filters, setFilters, categories }) {
   }, []);
 
   const newSearch = () => {
-    setFilters({ category: filterCategory, keyword: search, page: 0 });
+    setCurrentFilters(filterCategory, search);
   };
 
   useEffect(() => {
-    const { category, keyword } = filters;
     setFilterCategory(category);
     setSearch(keyword);
-  }, [filters]);
+  }, [category, keyword]);
 
-  const memoizedCategories = useMemo(() => categories.map((el) => translations[currentLang][el]), [currentLang]);
+  const memoizedCategories = useMemo(() => categories.map((el) => translations[currentLang][el]), [categories, currentLang]);
 
   return (
     <div className={styles.wrapper}>

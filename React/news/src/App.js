@@ -5,10 +5,9 @@ import { LangContext } from "./context";
 import Filters from "./components/Filters/Filters";
 import News from "./components/News/News";
 import getLatestNews from "./requests";
-import translations from "./tranlations.json";
 
 const categories = ["business", "entertainment", "environment", "food", "health", "politics", "science", "sports", "technology", "top", "world"];
-const languges = ["English", "Deutsch", "Español"];
+const languges = ["en", "de", "es"];
 const defaultFilters = { category: categories[0], keyword: null, page: 0 };
 
 function App() {
@@ -18,7 +17,7 @@ function App() {
 
   const getAndSetNews = () => {
     const { category, keyword, page } = filters;
-    getLatestNews(translations[currentLang]["lang"], category, keyword, page).then(({ results }) => {
+    getLatestNews(currentLang, category, keyword, page).then(({ results }) => {
       setNews(
         page === 0
           ? results
@@ -29,15 +28,10 @@ function App() {
     });
   };
 
-  const changeLang = useCallback(
-    (lang) => {
-      setCurrentLang(lang);
-      if (JSON.stringify(filters) === JSON.stringify(defaultFilters)) {
-        getAndSetNews();
-      } else setFilters(defaultFilters);
-    },
-    [filters]
-  );
+  const changeLang = useCallback((lang) => {
+    setCurrentLang(lang);
+    setFilters(defaultFilters);
+  }, []);
 
   const setNextPage = useCallback(() => {
     setFilters((prevFilters) => {
@@ -49,15 +43,20 @@ function App() {
     });
   }, []);
 
+  const setCurrentFilters = useCallback((category, keyword) => {
+    setFilters({ category, keyword, page: 0 });
+  }, []);
+
   useEffect(() => {
     getAndSetNews();
-  }, [filters]);
+  }, [filters, currentLang]);
 
+  const { category, keyword } = filters;
   return (
     <LangContext.Provider value={{ currentLang, changeLang }}>
       <div className={styles.wrapper}>
         <Header languges={languges} />
-        <Filters filters={filters} setFilters={setFilters} categories={categories} />
+        <Filters category={category} keyword={keyword} setCurrentFilters={setCurrentFilters} categories={categories} />
         <News news={news} setNextPage={setNextPage} />
       </div>
     </LangContext.Provider>

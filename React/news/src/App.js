@@ -7,11 +7,11 @@ import News from "./components/News/News";
 import getLatestNews from "./requests";
 
 const categories = ["business", "entertainment", "environment", "food", "health", "politics", "science", "sports", "technology", "top", "world"];
-const languges = ["en", "de", "es"];
+const languges = { en: "English", de: "Deutsch", es: "Español" };
 const defaultFilters = { category: categories[0], keyword: null, page: 0 };
 
 function App() {
-  const [currentLang, setCurrentLang] = useState(languges[0]);
+  const [currentLang, setCurrentLang] = useState(Object.keys(languges)[0]);
   const [news, setNews] = useState([]);
   const [filters, setFilters] = useState(defaultFilters);
 
